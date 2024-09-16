@@ -4,27 +4,21 @@ const trackSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
     },
     artist: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
+      type: String,
     },
     year: {
       type: Number,
-      required: true,
     },
     duration: {
       type: Number,
-      required: true,
     },
     album: {
       type: String,
     },
     url: {
       type: String,
-      required: true,
     },
     poster: {
       type: String,

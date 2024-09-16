@@ -24,13 +24,15 @@ const userSchema = new mongoose.Schema(
         ref: "track",
       },
     ],
+    playlists: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "playlist",
+      },
+    ],
     profileImage: {
       type: String,
       default: "defaultProfile.jpg",
-    },
-    isArtist: {
-      type: Boolean,
-      default: false,
     },
   },
   { timestamps: true }

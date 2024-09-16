@@ -16,10 +16,6 @@ const playlistSchema = new mongoose.Schema(
         ref: "track",
       },
     ],
-    isAlbum: {
-      type: Boolean,
-      default: false,
-    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

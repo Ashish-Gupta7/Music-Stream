@@ -6,11 +6,11 @@ const { userValidate, userModel } = require("../models/user-model");
 const { generateToken } = require("../utils/index-token-utils");
 
 const getLoginController = (req, res) => {
-  res.render("index");
+  res.render("login");
 };
 
 const getRegisterController = (req, res) => {
-  res.render("index");
+  res.render("register");
 };
 
 const postRegisterController = async (req, res) => {
@@ -57,7 +57,7 @@ const postRegisterController = async (req, res) => {
           res.cookie("token", token, {
             httpOnly: true,
           });
-          res.redirect("/profile");
+          res.redirect("/");
         } catch (err) {
           dbgr(`Error during user creation: ${err.message}`);
           return res
@@ -93,7 +93,7 @@ const postLoginController = async (req, res) => {
           res.cookie("token", token, {
             httpOnly: true,
           });
-          res.redirect("/profile");
+          res.redirect("/");
         } else {
           res.status(401).render("error", {
             err: "Invalid email or password.",
@@ -117,7 +117,7 @@ const postLoginController = async (req, res) => {
 
 const logoutController = (req, res) => {
   res.cookie("token", "");
-  res.redirect("/");
+  res.redirect("/login");
 };
 
 const profileController = async (req, res) => {

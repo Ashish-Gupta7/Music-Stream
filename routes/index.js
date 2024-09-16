@@ -15,7 +15,9 @@ const {
   redirectIfLoggedIn,
 } = require("../middlewares/login-middleware");
 
-router.get("/", redirectIfLoggedIn, getLoginController);
+router.get("/", isLoggedIn, profileController);
+
+router.get("/login", redirectIfLoggedIn, getLoginController);
 
 router.get("/register", redirectIfLoggedIn, getRegisterController);
 
@@ -24,7 +26,5 @@ router.post("/register", postRegisterController);
 router.post("/login", postLoginController);
 
 router.get("/logout", isLoggedIn, logoutController);
-
-router.get("/profile", isLoggedIn, profileController);
 
 module.exports = router;

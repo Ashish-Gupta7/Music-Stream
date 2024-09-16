@@ -32,9 +32,11 @@ app.use(flash());
 
 // routes
 const indexRouter = require("./routes/index");
+const musicRouter = require("./routes/music");
 
 // route middlewares
 app.use("/", indexRouter);
+app.use("/music", musicRouter);
 
 // server listening
 const PORT = process.env.PORT || 3000;

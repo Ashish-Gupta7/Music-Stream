@@ -7,7 +7,7 @@ const isLoggedIn = async (req, res, next) => {
     let cookieToken = req.cookies.token;
 
     if (!cookieToken) {
-      return res.redirect("/");
+      return res.redirect("/login");
     }
 
     jwt.verify(
@@ -16,19 +16,19 @@ const isLoggedIn = async (req, res, next) => {
       async (err, decoded) => {
         if (err) {
           dbgr(`Token verification error: ${err.message}`);
-          return res.redirect("/");
+          return res.redirect("/login");
         }
 
         if (!decoded || !decoded.id || !decoded.email) {
           dbgr("Token is missing required properties (id, email).");
-          return res.redirect("/");
+          return res.redirect("/login");
         }
 
         let user = await userModel.findOne({ email: decoded.email });
 
         if (!user) {
           dbgr("User not found for the provided token.");
-          return res.redirect("/");
+          return res.redirect("/login");
         }
 
         req.user = user;
@@ -55,7 +55,7 @@ const redirectIfLoggedIn = (req, res, next) => {
     let decoded = jwt.verify(cookieToken, process.env.JSON_WEB_TOKEN);
 
     if (decoded && decoded.id && decoded.email) {
-      return res.redirect("/profile");
+      return res.redirect("/");
     } else {
       return next();
     }
