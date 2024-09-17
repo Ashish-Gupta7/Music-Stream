@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    isUploader: {
+      type: Boolean,
+      default: false,
+    },
     favorites: [
       {
         type: mongoose.Schema.Types.ObjectId,

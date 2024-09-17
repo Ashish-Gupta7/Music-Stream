@@ -8,6 +8,7 @@ const {
   postLoginController,
   logoutController,
   profileController,
+  uploaderProfileUpdate,
 } = require("../controllers/index-controller");
 
 const {
@@ -26,5 +27,7 @@ router.post("/register", postRegisterController);
 router.post("/login", postLoginController);
 
 router.get("/logout", isLoggedIn, logoutController);
+
+router.post("/uploader", isLoggedIn, uploaderProfileUpdate);
 
 module.exports = router;

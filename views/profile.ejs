@@ -5,12 +5,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
 <body>
   <h1>profile</h1>
-  <a href="/music/upload">upload</a>
-  <a href="/logout">logout</a>
+  <% if(isUploader){ %>
+    <a href="/music/upload" class="text-blue-500 font-semibold">upload</a>
+    <% } else { %>
+      <form class="border border-black px-4 py-2 ml-2 mt-2 w-max" action="/uploader" method="post">
+        <label for="uploader">Are you a track uploader ?</label>
+        <input type="checkbox" name="uploader" id="uploader">
+        <input class="submit hidden bg-blue-500 px-4 py-2 rounded-md text-white" type="submit" value="Submit">
+      </form>
+      <% } %>
+        <a href="/logout" class="ml-4 text-blue-500 font-semibold">logout</a>
+        <a href="/playlist" class="ml-4 text-blue-500 font-semibold">library</a>
+
+        <script>
+          let uploader = document.querySelector("#uploader");
+          let submit = document.querySelector(".submit");
+          uploader.addEventListener("change", function () {
+            if (this.checked) {
+              submit.classList.remove("hidden")
+            } else {
+              submit.classList.add("hidden");
+            }
+          });
+
+        </script>
 </body>
 
 </html>

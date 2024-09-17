@@ -33,10 +33,12 @@ app.use(flash());
 // routes
 const indexRouter = require("./routes/index");
 const musicRouter = require("./routes/music");
+const playlistRouter = require("./routes/playlist");
 
 // route middlewares
 app.use("/", indexRouter);
 app.use("/music", musicRouter);
+app.use("/playlist", playlistRouter);
 
 // server listening
 const PORT = process.env.PORT || 3000;

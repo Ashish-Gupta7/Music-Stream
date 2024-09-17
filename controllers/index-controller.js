@@ -121,7 +121,34 @@ const logoutController = (req, res) => {
 };
 
 const profileController = async (req, res) => {
-  res.render("profile");
+  res.render("profile", { isUploader: req.user.isUploader });
+};
+
+const uploaderProfileUpdate = async (req, res) => {
+  try {
+    let user = req.user;
+    let { uploader } = req.body;
+
+    uploader = uploader === "on" ? true : false;
+
+    if (uploader) {
+      await userModel.findOneAndUpdate(
+        { _id: user._id },
+        {
+          isUploader: uploader,
+        }
+      );
+      return res.redirect("/");
+    } else {
+      dbgr(`uploader false during uploaderProfileUpdate`);
+      return res.redirect("/");
+    }
+  } catch (err) {
+    dbgr(`Error during uploaderProfileUpdate: ${err.message}`);
+    return res
+      .status(500)
+      .render("error", { err: "Internal Server Error", status: 500 });
+  }
 };
 
 module.exports = {
@@ -131,4 +158,5 @@ module.exports = {
   postLoginController,
   logoutController,
   profileController,
+  uploaderProfileUpdate,
 };
