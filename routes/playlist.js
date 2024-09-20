@@ -7,6 +7,7 @@ const {
   getCreatePlaylist,
   postCreatePlaylist,
   showPlaylist,
+  showAllPlaylistSongs,
 } = require("../controllers/playlist-controller");
 
 router.get("/", isLoggedIn, getCreatePlaylist);
@@ -14,5 +15,7 @@ router.get("/", isLoggedIn, getCreatePlaylist);
 router.post("/create", isLoggedIn, postCreatePlaylist);
 
 router.get("/show", isLoggedIn, showPlaylist);
+
+router.get("/songs/:playlistId", isLoggedIn, showAllPlaylistSongs);
 
 module.exports = router;

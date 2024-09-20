@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music Library</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <h1>Music Library</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Year</th>
+        <th>Duration</th>
+        <th>Picture</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% songs.forEach(function(song) { %>
+        <tr>
+          <td>
+            <%= song.title %>
+          </td>
+          <td>
+            <%= song.artist %>
+          </td>
+          <td>
+            <%= song.year %>
+          </td>
+          <td>
+            <%= (song.duration / 60).toFixed(2) %> mins
+          </td>
+          <td>
+            <!-- Song Picture (If available) -->
+            <% if (song.poster) { %>
+              <img src="<%= song.poster %>" alt="<%= song.title %> Poster" width="100" height="100" />
+              <% } else { %>
+                <p>No Image</p>
+                <% } %>
+          </td>
+          <td>
+            <!-- Play/Pause Button and Timeline -->
+            <audio id="audio-<%= song._id %>" src="<%= song.url %>"
+              ontimeupdate="updateProgress('<%= song._id %>')"></audio>
+
+            <button onclick="playSong('<%= song._id %>')">Play</button>
+            <button onclick="pauseSong('<%= song._id %>')">Pause</button>
+
+            <!-- Progress Bar (Timeline) -->
+            <div style="margin-top: 5px;">
+              <input type="range" id="progress-<%= song._id %>" value="0" max="100"
+                onchange="seekSong('<%= song._id %>')" />
+              <span id="time-<%= song._id %>">00:00</span>
+            </div>
+
+            <!-- Add to Playlist Button -->
+            <button onclick="addToPlaylist('<%= song._id %>')">Add to Playlist</button>
+
+            <!-- Download Button -->
+            <a href="<%= song.url %>" download="<%= song.title %>">
+              <button>Download</button>
+            </a>
+          </td>
+        </tr>
+        <% }) %>
+    </tbody>
+  </table>
+
+  <script>
+    function playSong(songId) {
+      const audio = document.getElementById(`audio-${songId}`);
+      if (audio) {
+        audio.play();
+      } else {
+        console.error("Audio element not found!");
+      }
+    }
+
+    function pauseSong(songId) {
+      const audio = document.getElementById(`audio-${songId}`);
+      if (audio) {
+        audio.pause();
+      } else {
+        console.error("Audio element not found!");
+      }
+    }
+
+    function addToPlaylist(songId) {
+      alert(`Song with ID ${songId} added to the playlist!`);
+    }
+
+    // Update the progress bar as the song plays
+    function updateProgress(songId) {
+      const audio = document.getElementById(`audio-${songId}`);
+      const progress = document.getElementById(`progress-${songId}`);
+      const timeDisplay = document.getElementById(`time-${songId}`);
+
+      if (audio && progress) {
+        const percentage = (audio.currentTime / audio.duration) * 100;
+        progress.value = percentage || 0;
+
+        const minutes = Math.floor(audio.currentTime / 60);
+        const seconds = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+        timeDisplay.innerText = `${minutes}:${seconds}`;
+      }
+    }
+
+    // Allow the user to seek in the song by adjusting the progress bar
+    function seekSong(songId) {
+      const audio = document.getElementById(`audio-${songId}`);
+      const progress = document.getElementById(`progress-${songId}`);
+
+      if (audio && progress) {
+        const newTime = (progress.value / 100) * audio.duration;
+        audio.currentTime = newTime;
+      }
+    }
+  </script>
+</body>
+
+</html>

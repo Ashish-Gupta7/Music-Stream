@@ -1,5 +1,6 @@
 const playlistModel = require("../models/playlist-model");
 const { userModel } = require("../models/user-model");
+const dbgr = require("debug")("development:playlistController");
 
 const getCreatePlaylist = (req, res) => {
   res.render("playlist");
@@ -23,10 +24,11 @@ const postCreatePlaylist = async (req, res) => {
     },
     { new: true }
   );
+
+  return res.redirect("/playlist");
 };
 
 const showPlaylist = async (req, res) => {
-  let user = req.user;
   let playlistIds = req.user.playlists;
 
   // Use Promise.all to handle multiple asynchronous operations
@@ -47,7 +49,23 @@ const showPlaylist = async (req, res) => {
     })
   );
 
-  res.render("showPlaylist", { playlists });
+  let username = req.user.username;
+
+  res.render("showPlaylist", { playlists, username });
 };
 
-module.exports = { getCreatePlaylist, postCreatePlaylist, showPlaylist };
+const showAllPlaylistSongs = (req, res) => {
+  let user = req.user;
+  let playlistId = req.params.playlistId;
+
+  dbgr(playlistId);
+  dbgr(user);
+  res.send("done");
+};
+
+module.exports = {
+  getCreatePlaylist,
+  postCreatePlaylist,
+  showPlaylist,
+  showAllPlaylistSongs,
+};

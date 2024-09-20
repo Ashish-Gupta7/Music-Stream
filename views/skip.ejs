@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+  <h2>Following songs were already uploaded:</h2>
+  <ul>
+    <% skippedTracks.forEach(track=> { %>
+      <li>
+        <%= track.title %>
+      </li>
+      <% }) %>
+  </ul>
+  <a href="">Skip and continue</a>
+
+</body>
+
+</html>

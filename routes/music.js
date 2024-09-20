@@ -8,10 +8,13 @@ const upload = require("../utils/multer-utils");
 const {
   getUploadPage,
   postUploadTrack,
+  showAllSongs,
 } = require("../controllers/music-controller");
 
 router.get("/upload", isLoggedIn, uploaderMiddleware, getUploadPage);
 
 router.post("/upload", isLoggedIn, uploaderMiddleware, upload, postUploadTrack);
+
+router.get("/allsongs", isLoggedIn, showAllSongs);
 
 module.exports = router;

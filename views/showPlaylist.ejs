@@ -16,16 +16,16 @@
 
       <!-- Playlist Header -->
       <div class="playlist-header flex items-center justify-between mb-8">
-        <h1 class="text-4xl font-bold">
+        <a href="/playlist/songs/<%= playlist._id %>" class="text-4xl font-bold">
           <%= playlist.name %>
-        </h1>
+        </a>
         <img src="/images/<%= playlist.poster %>" alt="<%= playlist.name %> Poster"
           class="w-32 h-32 object-cover rounded-lg shadow-lg">
       </div>
 
       <!-- Playlist Owner -->
       <div class="playlist-owner mb-6">
-        <h3 class="text-xl font-semibold text-gray-700">Created By: <%= playlist.user.name %>
+        <h3 class="text-xl font-semibold text-gray-700">Created By: <%= username %>
         </h3>
       </div>
 
@@ -55,13 +55,15 @@
       </div>
 
       <!-- Timestamps -->
-      <div class="playlist-info text-sm text-gray-500">
-        <p>Created on: <%= playlist.createdAt.toDateString() %>
-        </p>
-        <p>Last updated: <%= playlist.updatedAt.toDateString() %>
-        </p>
+      <div class="playlist-info text-sm text-gray-500 flex items-center justify-between">
+        <div>
+          <p>Created on: <%= playlist.createdAt.toDateString() %>
+          </p>
+          <p>Last updated: <%= playlist.updatedAt.toDateString() %>
+          </p>
+        </div>
+        <a href="/music/allsongs" class="text-blue-500">Add more songs</a>
       </div>
-
     </div>
     <% }) %>
 </body>
