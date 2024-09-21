@@ -1,5 +1,6 @@
 const musicMetadata = require("music-metadata");
 const trackModel = require("../models/track-model");
+const playlistModel = require("../models/playlist-model");
 const dbgr = require("debug")("development:musicController");
 const path = require("path");
 const fs = require("fs");
@@ -81,4 +82,32 @@ const showAllSongs = async (req, res) => {
   }
 };
 
-module.exports = { getUploadPage, postUploadTrack, showAllSongs };
+const addOtherSongs = async (req, res) => {
+  try {
+    let playlistId = req.params.playlistId;
+    let playlist = await playlistModel.findOne({ _id: playlistId });
+    let tracks = playlist.tracks;
+    if (tracks.length === 0) {
+      let songs = await trackModel.find();
+      res.render("songs", { songs, playlistId: playlist._id });
+    } else if (tracks.length > 0) {
+      let playlistTracks = await playlistModel
+        .findOne({ _id: playlistId })
+        .populate("tracks");
+      let existingTrackIds = playlistTracks.tracks.map((track) => track._id);
+      let availableTracks = await trackModel.find({
+        _id: { $nin: existingTrackIds },
+      });
+      res.render("songs", { songs: availableTracks, playlistId });
+    }
+
+    res.send("play");
+  } catch (err) {}
+};
+
+module.exports = {
+  getUploadPage,
+  postUploadTrack,
+  showAllSongs,
+  addOtherSongs,
+};

@@ -5,87 +5,112 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Music Library</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-  <h1>Music Library</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Artist</th>
-        <th>Year</th>
-        <th>Duration</th>
-        <th>Picture</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% songs.forEach(function(song) { %>
-        <tr>
-          <td>
-            <%= song.title %>
-          </td>
-          <td>
-            <%= song.artist %>
-          </td>
-          <td>
-            <%= song.year %>
-          </td>
-          <td>
-            <%= (song.duration / 60).toFixed(2) %> mins
-          </td>
-          <td>
-            <!-- Song Picture (If available) -->
-            <% if (song.poster) { %>
-              <img src="<%= song.poster %>" alt="<%= song.title %> Poster" width="100" height="100" />
-              <% } else { %>
-                <p>No Image</p>
-                <% } %>
-          </td>
-          <td>
-            <!-- Play/Pause Button and Timeline -->
-            <audio id="audio-<%= song._id %>" src="<%= song.url %>"
-              ontimeupdate="updateProgress('<%= song._id %>')"></audio>
+<body class="bg-gray-100 text-gray-800 flex flex-col items-center min-h-screen py-10">
+  <h1 class="text-4xl font-bold mb-8">Music Library</h1>
 
-            <button onclick="playSong('<%= song._id %>')">Play</button>
-            <button onclick="pauseSong('<%= song._id %>')">Pause</button>
+  <div class="overflow-x-auto w-full max-w-5xl">
+    <% var username=typeof username==="undefined" ? false : username %>
+      <% var plName=typeof playlistName==="undefined" ? false : playlistName %>
+        <% if(username) { %>
+          <h1>user:
+            <%= username %>
+          </h1>
+          <% } %>
+            <% if(plName) {%>
+              <h1>Playlist:
+                <%= plName %>
+              </h1>
+              <%} %>
+                <table class="table-auto w-full bg-white shadow-md rounded-lg overflow-hidden">
+                  <thead class="bg-gray-200 text-gray-700">
+                    <tr>
+                      <th class="px-4 py-2 text-left">Title</th>
+                      <th class="px-4 py-2 text-left">Artist</th>
+                      <th class="px-4 py-2 text-left">Year</th>
+                      <th class="px-4 py-2 text-left">Duration</th>
+                      <th class="px-4 py-2 text-left">Picture</th>
+                      <th class="px-4 py-2 text-left">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% songs.forEach(function(song, index) { %>
+                      <tr class="border-b hover:bg-gray-100">
+                        <td class="px-4 py-2">
+                          <%= song.title %>
+                        </td>
+                        <td class="px-4 py-2">
+                          <%= song.artist %>
+                        </td>
+                        <td class="px-4 py-2">
+                          <%= song.year %>
+                        </td>
+                        <td class="px-4 py-2">
+                          <%= (song.duration / 60).toFixed(2) %> mins
+                        </td>
+                        <td class="px-4 py-2">
+                          <% if (song.poster) { %>
+                            <img src="<%= song.poster %>" alt="<%= song.title %> Poster"
+                              class="w-20 h-20 object-cover rounded-lg" />
+                            <% } else { %>
+                              <p>No Image</p>
+                              <% } %>
+                        </td>
+                        <td class="px-4 py-2 space-y-2">
+                          <audio id="audio-<%= song._id %>" src="<%= song.url %>"
+                            ontimeupdate="updateProgress('<%= song._id %>')" onended="nextSong('<%= index %>')"></audio>
 
-            <!-- Progress Bar (Timeline) -->
-            <div style="margin-top: 5px;">
-              <input type="range" id="progress-<%= song._id %>" value="0" max="100"
-                onchange="seekSong('<%= song._id %>')" />
-              <span id="time-<%= song._id %>">00:00</span>
-            </div>
 
-            <!-- Add to Playlist Button -->
-            <button onclick="addToPlaylist('<%= song._id %>')">Add to Playlist</button>
+                          <div class="flex items-center space-x-2">
+                            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                              onclick="playSong('<%= song._id %>')">Play</button>
+                            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                              onclick="pauseSong('<%= song._id %>')">Pause</button>
+                          </div>
 
-            <!-- Download Button -->
-            <a href="<%= song.url %>" download="<%= song.title %>">
-              <button>Download</button>
-            </a>
-          </td>
-        </tr>
-        <% }) %>
-    </tbody>
-  </table>
+                          <div class="flex items-center space-x-2">
+                            <input type="range" id="progress-<%= song._id %>" class="w-2/3" value="0" max="100"
+                              onchange="seekSong('<%= song._id %>')" />
+                            <span id="time-<%= song._id %>" class="text-sm">00:00</span>
+                          </div>
+
+                          <% var add=typeof playlistId==="undefined" ? false : playlistId %>
+                            <% if(add){ %>
+                              <form action="/playlist/<%= add %>/<%= song._id %>" method="post"
+                                class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"><input
+                                  type="submit" value="Add to Playlist"></form>
+                              <% } %>
+                                <% var remove=typeof removePl==="undefined" ? false : removePl %>
+                                  <% if(remove){ %>
+                                    <form action="/playlist/remove/<%= remove %>/<%= song._id %>" method="post"
+                                      class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"><input
+                                        type="submit" value="Remove to Playlist"></form>
+                                    <% } %>
+
+                                      <a href="<%= song.url %>" download="<%= song.title %>">
+                                        <button
+                                          class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Download</button>
+                                      </a>
+                        </td>
+                      </tr>
+                      <% }) %>
+                  </tbody>
+                </table>
+  </div>
 
   <script>
+    function pauseAllSongs() {
+      const allAudios = document.querySelectorAll('audio');
+      allAudios.forEach(audio => audio.pause());
+    }
+
     function playSong(songId) {
+      pauseAllSongs();
       const audio = document.getElementById(`audio-${songId}`);
       if (audio) {
         audio.play();
-      } else {
-        console.error("Audio element not found!");
-      }
-    }
-
-    function pauseSong(songId) {
-      const audio = document.getElementById(`audio-${songId}`);
-      if (audio) {
-        audio.pause();
       } else {
         console.error("Audio element not found!");
       }
@@ -95,7 +120,6 @@
       alert(`Song with ID ${songId} added to the playlist!`);
     }
 
-    // Update the progress bar as the song plays
     function updateProgress(songId) {
       const audio = document.getElementById(`audio-${songId}`);
       const progress = document.getElementById(`progress-${songId}`);
@@ -111,7 +135,6 @@
       }
     }
 
-    // Allow the user to seek in the song by adjusting the progress bar
     function seekSong(songId) {
       const audio = document.getElementById(`audio-${songId}`);
       const progress = document.getElementById(`progress-${songId}`);
@@ -121,6 +144,26 @@
         audio.currentTime = newTime;
       }
     }
+
+    function resetSong(songId) {
+      const audio = document.getElementById(`audio-${songId}`);
+      if (audio) {
+        audio.currentTime = 0;
+      }
+    }
+
+    function nextSong(currentIndex) {
+      const allAudios = document.querySelectorAll('audio');
+      if (currentIndex < allAudios.length - 1) {
+        const nextAudio = allAudios[currentIndex + 1];
+        resetSong(allAudios[currentIndex].id.split('-')[1]);
+        nextAudio.play();
+      } else {
+        console.log("End of playlist");
+        resetSong(allAudios[currentIndex].id.split('-')[1]);
+      }
+    }
+
   </script>
 </body>
 

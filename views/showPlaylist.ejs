@@ -29,31 +29,6 @@
         </h3>
       </div>
 
-      <!-- Tracks Section -->
-      <div class="playlist-tracks mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Tracks</h2>
-        <% if (playlist.tracks.length> 0) { %>
-          <ul class="space-y-4">
-            <% playlist.tracks.forEach(function(track) { %>
-              <li class="p-4 bg-gray-50 rounded-lg shadow-sm flex items-center justify-between">
-                <div>
-                  <strong class="text-lg">
-                    <%= track.title %>
-                  </strong>
-                  <span class="text-gray-600">(<%= track.duration %> minutes)</span>
-                </div>
-                <audio controls class="ml-4">
-                  <source src="<%= track.fileUrl %>" type="audio/mpeg">
-                  Your browser does not support the audio element.
-                </audio>
-              </li>
-              <% }) %>
-          </ul>
-          <% } else { %>
-            <p class="text-gray-500">No tracks available in this playlist.</p>
-            <% } %>
-      </div>
-
       <!-- Timestamps -->
       <div class="playlist-info text-sm text-gray-500 flex items-center justify-between">
         <div>
@@ -62,7 +37,7 @@
           <p>Last updated: <%= playlist.updatedAt.toDateString() %>
           </p>
         </div>
-        <a href="/music/allsongs" class="text-blue-500">Add more songs</a>
+        <a href="/music/allsongs/<%= playlist._id %>" class="text-blue-500">Add songs</a>
       </div>
     </div>
     <% }) %>

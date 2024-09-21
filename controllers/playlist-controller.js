@@ -1,4 +1,5 @@
 const playlistModel = require("../models/playlist-model");
+const trackModel = require("../models/track-model");
 const { userModel } = require("../models/user-model");
 const dbgr = require("debug")("development:playlistController");
 
@@ -54,13 +55,46 @@ const showPlaylist = async (req, res) => {
   res.render("showPlaylist", { playlists, username });
 };
 
-const showAllPlaylistSongs = (req, res) => {
+const showAllPlaylistSongs = async (req, res) => {
   let user = req.user;
   let playlistId = req.params.playlistId;
+  let playlist = await playlistModel.findOne({ _id: playlistId });
+  let songIds = playlist.tracks;
+  let songs = await Promise.all(
+    songIds.map(async (songId) => {
+      return await trackModel.findOne({ _id: songId });
+    })
+  );
+  res.render("songs", {
+    username: user.username,
+    songs,
+    playlistName: playlist.name,
+    removePl: playlistId,
+  });
+};
 
-  dbgr(playlistId);
-  dbgr(user);
-  res.send("done");
+const playlistAddTrack = async (req, res) => {
+  let playlistId = req.params.playlistId;
+  let songId = req.params.songId;
+
+  let playlist = await playlistModel.findOne({ _id: playlistId });
+  if (!playlist.tracks.includes(songId)) {
+    playlist.tracks.push(songId);
+    await playlist.save();
+  }
+  res.redirect(`/music/allsongs/${playlistId}`);
+};
+
+const playlistRemoveTrack = async (req, res) => {
+  let playlistId = req.params.playlistId;
+  let songId = req.params.songId;
+
+  let playlist = await playlistModel.findOne({ _id: playlistId });
+  if (playlist.tracks.includes(songId)) {
+    playlist.tracks = playlist.tracks.filter((track) => track != songId);
+    await playlist.save();
+    res.redirect(`/playlist/songs/${playlistId}`);
+  }
 };
 
 module.exports = {
@@ -68,4 +102,6 @@ module.exports = {
   postCreatePlaylist,
   showPlaylist,
   showAllPlaylistSongs,
+  playlistAddTrack,
+  playlistRemoveTrack,
 };

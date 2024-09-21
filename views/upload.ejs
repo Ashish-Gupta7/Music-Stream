@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Music</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
-
 </head>
 
 <body class="bg-gray-100 min-h-screen flex items-center justify-center">
@@ -14,13 +13,14 @@
   <div class="bg-white shadow-md rounded-lg p-8 max-w-lg w-full">
     <h1 class="text-2xl font-semibold text-center mb-6">Upload Your Track</h1>
 
-    <form action="/music/upload" method="POST" enctype="multipart/form-data" class="space-y-4">
+    <form id="uploadForm" action="/music/upload" method="POST" enctype="multipart/form-data" class="space-y-4">
       <!-- Track File -->
       <div>
         <label for="track" class="block text-sm font-medium text-gray-700">Upload Track</label>
         <input type="file" id="track" name="track"
           class="mt-1 block w-full px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           multiple accept="audio/*">
+        <p id="fileLimitWarning" class="text-red-500 text-sm mt-1 hidden">You can only upload up to 5 tracks.</p>
       </div>
 
       <!-- Submit Button -->
@@ -32,6 +32,20 @@
       </div>
     </form>
   </div>
+
+  <script>
+    document.getElementById('track').addEventListener('change', function () {
+      const maxFiles = 5;
+      const fileLimitWarning = document.getElementById('fileLimitWarning');
+
+      if (this.files.length > maxFiles) {
+        fileLimitWarning.classList.remove('hidden');
+        this.value = '';
+      } else {
+        fileLimitWarning.classList.add('hidden');
+      }
+    });
+  </script>
 
 </body>
 
