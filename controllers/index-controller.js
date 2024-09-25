@@ -4,6 +4,7 @@ const dbgr = require("debug")("development:auth");
 const { userValidate, userModel } = require("../models/user-model");
 
 const { generateToken } = require("../utils/index-token-utils");
+const trackModel = require("../models/track-model");
 
 const getLoginController = (req, res) => {
   res.render("login");
@@ -117,14 +118,24 @@ const postLoginController = async (req, res) => {
 
 const logoutController = (req, res) => {
   res.cookie("token", "");
-  res.redirect("/login");
+  res.redirect("/");
 };
 
-const profileController = async (req, res) => {
-  res.render("profile", { isUploader: req.user.isUploader });
+const homeController = async (req, res) => {
+  res.redirect("home");
 };
 
-const uploaderProfileUpdate = async (req, res) => {
+const showHomePageController = async (req, res) => {
+  let songs = await trackModel.find();
+
+  res.render("home", {
+    isUploader: req.user.isUploader,
+    username: req.user.username,
+    songs,
+  });
+};
+
+const uploaderHomeUpdate = async (req, res) => {
   try {
     let user = req.user;
     let { uploader } = req.body;
@@ -140,11 +151,11 @@ const uploaderProfileUpdate = async (req, res) => {
       );
       return res.redirect("/");
     } else {
-      dbgr(`uploader false during uploaderProfileUpdate`);
+      dbgr(`uploader false during uploaderHomeUpdate`);
       return res.redirect("/");
     }
   } catch (err) {
-    dbgr(`Error during uploaderProfileUpdate: ${err.message}`);
+    dbgr(`Error during uploaderHomeUpdate: ${err.message}`);
     return res
       .status(500)
       .render("error", { err: "Internal Server Error", status: 500 });
@@ -157,6 +168,7 @@ module.exports = {
   postRegisterController,
   postLoginController,
   logoutController,
-  profileController,
-  uploaderProfileUpdate,
+  homeController,
+  uploaderHomeUpdate,
+  showHomePageController,
 };

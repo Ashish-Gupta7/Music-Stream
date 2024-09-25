@@ -7,8 +7,9 @@ const {
   postRegisterController,
   postLoginController,
   logoutController,
-  profileController,
-  uploaderProfileUpdate,
+  homeController,
+  uploaderHomeUpdate,
+  showHomePageController,
 } = require("../controllers/index-controller");
 
 const {
@@ -16,7 +17,9 @@ const {
   redirectIfLoggedIn,
 } = require("../middlewares/login-middleware");
 
-router.get("/", isLoggedIn, profileController);
+router.get("/", isLoggedIn, homeController);
+
+router.get("/home", isLoggedIn, showHomePageController);
 
 router.get("/login", redirectIfLoggedIn, getLoginController);
 
@@ -28,6 +31,6 @@ router.post("/login", postLoginController);
 
 router.get("/logout", isLoggedIn, logoutController);
 
-router.post("/uploader", isLoggedIn, uploaderProfileUpdate);
+router.post("/uploader", isLoggedIn, uploaderHomeUpdate);
 
 module.exports = router;

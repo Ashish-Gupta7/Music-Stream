@@ -43,11 +43,15 @@ const postUploadTrack = async (req, res) => {
         return { skip: true, title: metadata.common.title };
       }
 
+      let duration = `${Math.floor(metadata.format.duration / 60)}:${Math.floor(
+        metadata.format.duration % 60
+      )}`;
+
       return {
         title: metadata.common.title,
         artist: metadata.common.artist,
         year: metadata.common.year,
-        duration: metadata.format.duration,
+        duration: duration,
         url: relativeTrackUrl,
         poster: posterData,
       };

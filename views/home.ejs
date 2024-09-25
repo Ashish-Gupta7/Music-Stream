@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+  }
+
+  .song-list::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .song-list::-webkit-scrollbar-thumb {
+    background-color: #0b7854;
+  }
+
+  .bg-anim1 {
+    -webkit-box-shadow: 0px 0px 105px 45px rgba(45, 255, 196, 0.9);
+    -moz-box-shadow: 0px 0px 105px 45px rgba(45, 255, 196, 0.9);
+    box-shadow: 0px 0px 105px 45px rgba(45, 255, 196, 0.9);
+  }
+
+  .menu,
+  .songs {
+    backdrop-filter: blur(8px) saturate(131%);
+    -webkit-backdrop-filter: blur(8px) saturate(131%);
+    background-color: rgba(0, 0, 0, 0.72);
+  }
+
+  .topSongs {
+    border-radius: 14% 86% 18% 82% / 63% 48% 52% 37%;
+  }
+</style>
+
+<body class="overflow-hidden selection:text-emerald-700">
+
+  <div class="w-full h-full bg-[#101010] flex flex-row items-start">
+
+    <!-- Menu section -->
+    <div class="menu h-full p-10 pr-16 relative">
+      <div class="bg-anim1 absolute bg-emerald-600/20 bottom-0 left-0 -z-10"></div>
+      <div class="bg-anim1 absolute bg-emerald-600/20 top-7 left-40 -z-10"></div>
+      <div class="flex flex-col gap-8">
+        <div class="flex flex-row items-center gap-3 tracking-widest text-emerald-500 font-semibold"><i
+            class="ri-music-2-line"></i>
+          Music</div>
+        <div class="flex flex-col gap-8">
+          <div class="text-white flex flex-col gap-3 text-sm">
+            <div class="text-emerald-100 tracking-[0.15rem] font-mono uppercase font-semibold">Menu</div>
+            <div class="flex flex-col gap-4 text-[13px] font-semibold text-white/60">
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-compass-line"></i>
+                  Explore</a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-volume-up-line"></i>
+                  Genres</a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-album-line"></i> Albums
+                </a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-mic-line"></i> Artists
+                </a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-radio-2-line"></i> Radio
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="text-white flex flex-col gap-3 text-sm">
+            <div class="text-emerald-100 tracking-[0.15rem] font-mono uppercase font-semibold">Library</div>
+            <div class="flex flex-col gap-4 text-[13px] font-semibold text-white/60">
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-history-line"></i>
+                  Recent</a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-disc-line"></i> Albums
+                </a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-heart-3-line"></i>
+                  Favourites</a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-folder-music-line"></i>
+                  Local</a>
+              </div>
+            </div>
+          </div>
+          <div class="text-white flex flex-col gap-3 text-sm">
+            <div class="text-emerald-100 tracking-[0.15rem] font-mono uppercase font-semibold">Playlist</div>
+            <div class="flex flex-col gap-4 text-[13px] font-semibold text-white/60">
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="/playlist"
+                  class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-folder-add-line"></i>
+                  Create New</a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-pantone-line"></i>
+                  Playlist 1</a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="" class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-pantone-line"></i>
+                  Playlist 2</a>
+              </div>
+              <div class="flex flex-row items-center">
+                <div>&nbsp;&nbsp;&nbsp;</div>
+                <a href="/playlist/show"
+                  class="flex flex-row items-center gap-4 hover:text-emerald-500 hover:duration-200 w-max"><i
+                    class="ri-folder-chart-line"></i>
+                  All Playlists</a>
+              </div>
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- songs -->
+    <div class="songs w-full h-full p-10 pr-16 pt-6 relative flex flex-col gap-6">
+
+      <div class="text-white flex items-center justify-between">
+        <div class="text-emerald-400">
+          Welcome, <%= username %>
+        </div>
+        <div class="flex items-start gap-8">
+          <form action="" method="get">
+            <div class="relative w-60 z-0 mb-5 group">
+              <input type="search" name="search" id="floating_search" autocomplete="off"
+                class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-emerald-500 focus:outline-none focus:ring-0 focus:border-emerald-600 peer"
+                placeholder=" " required />
+              <label for="floating_search"
+                class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-emerald-600 peer-focus:dark:text-emerald-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Search</label>
+            </div>
+          </form>
+          <a href=""
+            class="h-10 w-10 flex items-center justify-center bg-emerald-800 border border-transparent rounded-full">
+            <%= username.charAt(0).toUpperCase() %>
+          </a>
+        </div>
+      </div>
+
+      <div class="song-list w-full h-full overflow-y-auto">
+        <table class="min-w-full table-auto">
+
+          <!-- Table Heading -->
+          <thead class="">
+            <tr class="text-emerald-500">
+              <th
+                class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+                #</th>
+              <th
+                class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+                Poster</th>
+              <th
+                class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+                Title</th>
+              <th
+                class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+                Artist</th>
+              <th
+                class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+                Year</th>
+              <th
+                class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+                Duration</th>
+              <th
+                class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+                Favourite</th>
+            </tr>
+          </thead>
+
+          <!-- Table Body with Dummy Data -->
+          <tbody class="text-white/60 text-sm divide-y divide-gray-200">
+            <% songs.forEach((song, idx)=> { %>
+              <tr>
+                <td class="whitespace-nowrap py-2">
+                  <%= idx + 1 %>
+                </td>
+                <td class="whitespace-nowrap py-2">
+                  <img src="<%= song.poster %>" alt="<%= song.title %>" class="w-12 h-12 object-cover rounded">
+                </td>
+                <td class="whitespace-nowrap py-2">
+                  <a href="<%= song.url %>">
+                    <%= song.title %>
+                  </a>
+                </td>
+                <td class="whitespace-nowrap py-2">
+                  <%= song.artist %>
+                </td>
+                <td class="whitespace-nowrap py-2">
+                  <%= song.year %>
+                </td>
+                <td class="whitespace-nowrap py-2">
+                  <%= song.duration %>
+                </td>
+                <td class="whitespace-nowrap py-2">
+                  <input type="checkbox"
+                    class="form-checkbox h-5 w-5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
+                </td>
+              </tr>
+              <% }); %>
+                <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+
+
+  </script>
+
+</body>
+
+</html>

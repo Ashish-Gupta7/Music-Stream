@@ -12,9 +12,6 @@ const trackSchema = new mongoose.Schema(
       type: Number,
     },
     duration: {
-      type: Number,
-    },
-    album: {
       type: String,
     },
     url: {
