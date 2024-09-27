@@ -1,0 +1,65 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.song-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.song-list::-webkit-scrollbar-thumb {
+  background-color: #0b7854;
+}
+
+.minus560::-webkit-scrollbar {
+  width: 0px;
+}
+
+.bg-anim1 {
+  -webkit-box-shadow: 0px 0px 105px 45px rgba(45, 255, 196, 0.9);
+  -moz-box-shadow: 0px 0px 105px 45px rgba(45, 255, 196, 0.9);
+  box-shadow: 0px 0px 105px 45px rgba(45, 255, 196, 0.9);
+}
+
+.menu,
+.songs {
+  backdrop-filter: blur(8px) saturate(131%);
+  -webkit-backdrop-filter: blur(8px) saturate(131%);
+  background-color: rgba(0, 0, 0, 0.72);
+}
+
+.topSongs {
+  border-radius: 14% 86% 18% 82% / 63% 48% 52% 37%;
+}
+
+.show-details {
+  backdrop-filter: blur(9px) saturate(0%);
+  -webkit-backdrop-filter: blur(9px) saturate(0%);
+  background-color: rgba(6, 95, 70, 0.71);
+  /* backdrop-filter: blur(9px) saturate(0%);
+  -webkit-backdrop-filter: blur(9px) saturate(0%);
+  background-color: rgba(0, 0, 0, 0.71); */
+}
+
+/* Styling for the heart icon animation */
+.heart-icon {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  color: red;
+  font-size: 2rem;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.isfav i {
+  color: red; /* Changes the heart icon color when it's a favorite */
+}

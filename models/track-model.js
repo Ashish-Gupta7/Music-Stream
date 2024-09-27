@@ -21,6 +21,12 @@ const trackSchema = new mongoose.Schema(
       type: String,
       default: "defaultPoster.jpg",
     },
+    album: {
+      type: String,
+    },
+    allArtists: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );

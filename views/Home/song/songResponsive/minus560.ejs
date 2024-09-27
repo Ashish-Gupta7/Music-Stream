@@ -1,0 +1,103 @@
+<div class="minus560 hidden w-full h-full overflow-y-scroll max-[560px]:block">
+  <div class="w-full h-full relative">
+    <% songs.forEach((song, index)=> { %>
+      <div class="hide-for-details w-full flex flex-row items-center justify-between pt-3">
+        <div class="flex items-center gap-3">
+          <div class="h-12 w-12 flex items-center justify-center rounded max-[340px]:h-10 max-[340px]:w-10">
+            <img class="w-full h-full object-center rounded" src="<%= song.poster %>" alt="<%= song.title %>">
+          </div>
+          <div class="flex flex-col items-start">
+            <div
+              class="text-white whitespace-nowrap overflow-hidden text-ellipsis max-[340px]:text-sm max-[340px]:max-w-[150px] max-[560px]:max-w-[300px]">
+              <a href="<%= song.url %>">
+                <%= song.title %>
+              </a>
+            </div>
+            <div class="text-white/50 text-sm max-[340px]:text-xs">
+              <%= song.artist %>
+            </div>
+          </div>
+        </div>
+        <div class="more-button text-white cursor-pointer"><i class="ri-more-2-line"></i></div>
+      </div>
+      <div class="w-full h-[2px] flex items-end justify-end">
+        <div class="progress-bar w-[100px] h-full bg-emerald-950" id="progress-<%= index %>"></div>
+      </div>
+
+      <!-- show-details and more options -->
+      <div class="show-details selection:bg-black absolute top-0 left-[-100vw] w-full text-white">
+        <div class="w-full text-white text-lg flex justify-end p-4"><i
+            class="close-details cursor-pointer ri-close-large-line"></i>
+        </div>
+        <div class="w-full h-[80%] p-4 flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <div class="font-mono">Poster/-</div>
+            <div class="h-12 w-12 flex items-center justify-center rounded max-[340px]:h-10 max-[340px]:w-10">
+              <img class="w-full h-full object-center rounded" src="<%= song.poster %>" alt="<%= song.title %>">
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="font-mono">Title/-</div>
+            <div class="text-sm">
+              <%= song.title %>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="font-mono">Artist/-</div>
+            <div class="text-sm">
+              <%= song.artist %>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="font-mono">Artists/-</div>
+            <div class="text-sm">
+              <%= song.allArtists %>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="font-mono">Album/-</div>
+            <div class="text-sm">
+              <%= song.album %>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="font-mono">Year/-</div>
+            <div class="text-sm">
+              <%= song.year %>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="font-mono">Duration/-</div>
+            <div class="text-sm">
+              <%= song.duration %>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <% const date=song.createdAt; const options={ weekday: 'short' , year: 'numeric' , month: 'short' ,
+              day: 'numeric' }; const formattedDate=date.toLocaleDateString('en-US', options); %>
+              <div class="font-mono">Uploaded At/-</div>
+              <div class="text-sm">
+                <%= formattedDate %>
+              </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="font-mono">Favourite</div>
+            <% let isFav=user.favourites.includes(song._id); %>
+              <form id="fav-form" action="/home/favourite" method="post">
+                <i class="<%= isFav ? 'ri-heart-fill' : 'ri-heart-line' %> text-red-500 cursor-pointer fav-icon"
+                  id="fav-icon-<%= song._id %>" data-song-id="<%= song._id %>"></i>
+              </form>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="font-mono">Download/-</div>
+            <a href="<%= song.url %>" download="<%= song.title %>.mp3" class="text-white cursor-pointer">
+              <i class="ri-download-line"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <% }) %>
+
+  </div>
+</div>

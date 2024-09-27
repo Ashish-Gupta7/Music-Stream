@@ -10,6 +10,8 @@ const {
   homeController,
   uploaderHomeUpdate,
   showHomePageController,
+  showHomeAfterSearch,
+  addFavouriteSong,
 } = require("../controllers/index-controller");
 
 const {
@@ -18,8 +20,6 @@ const {
 } = require("../middlewares/login-middleware");
 
 router.get("/", isLoggedIn, homeController);
-
-router.get("/home", isLoggedIn, showHomePageController);
 
 router.get("/login", redirectIfLoggedIn, getLoginController);
 
@@ -32,5 +32,11 @@ router.post("/login", postLoginController);
 router.get("/logout", isLoggedIn, logoutController);
 
 router.post("/uploader", isLoggedIn, uploaderHomeUpdate);
+
+router.get("/home", isLoggedIn, showHomePageController);
+
+router.get("/home/search", isLoggedIn, showHomeAfterSearch);
+
+router.post("/home/favourite", isLoggedIn, addFavouriteSong);
 
 module.exports = router;

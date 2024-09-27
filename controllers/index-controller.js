@@ -122,16 +122,39 @@ const logoutController = (req, res) => {
 };
 
 const homeController = async (req, res) => {
-  res.redirect("home");
+  res.redirect("/home");
 };
 
 const showHomePageController = async (req, res) => {
   let songs = await trackModel.find();
+  let user = await userModel.findOne({ _id: req.user.id });
 
   res.render("home", {
     isUploader: req.user.isUploader,
     username: req.user.username,
     songs,
+    user,
+  });
+};
+
+const showHomeAfterSearch = async (req, res) => {
+  let songs = await trackModel.find();
+  let searchQuery = req.query.search.toLowerCase();
+  let searchedSong = songs.filter((song) =>
+    song.title.toLowerCase().includes(searchQuery)
+  );
+  let remainingSongs = songs.filter(
+    (song) => !song.title.toLowerCase().includes(searchQuery)
+  );
+  let updatedSongs = [...searchedSong, ...remainingSongs];
+
+  let user = await userModel.findOne({ _id: req.user.id });
+
+  res.render("home", {
+    isUploader: req.user.isUploader,
+    username: req.user.username,
+    songs: updatedSongs,
+    user,
   });
 };
 
@@ -162,6 +185,32 @@ const uploaderHomeUpdate = async (req, res) => {
   }
 };
 
+const addFavouriteSong = async (req, res) => {
+  try {
+    const { songId, isFav } = req.body;
+
+    const userId = req.user.id;
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const songIndex = user.favourites.indexOf(songId);
+
+    if (isFav && songIndex === -1) {
+      user.favourites.push(songId);
+    } else if (!isFav && songIndex !== -1) {
+      user.favourites.splice(songIndex, 1);
+    }
+
+    await user.save();
+    res.json({ message: "Favourite status updated successfully!" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update favourite status" });
+  }
+};
+
 module.exports = {
   getLoginController,
   getRegisterController,
@@ -171,4 +220,6 @@ module.exports = {
   homeController,
   uploaderHomeUpdate,
   showHomePageController,
+  showHomeAfterSearch,
+  addFavouriteSong,
 };

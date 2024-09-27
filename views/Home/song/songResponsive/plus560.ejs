@@ -1,0 +1,61 @@
+<div class="song-list w-full h-full overflow-y-auto max-[560px]:hidden">
+  <table class="min-w-full table-auto">
+
+    <!-- Table Heading -->
+    <thead>
+      <tr class="text-emerald-500">
+        <th class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+          #</th>
+        <th class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+          Poster</th>
+        <th class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+          Title</th>
+        <th class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+          Artist</th>
+        <th
+          class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4 max-[750px]:hidden">
+          Year</th>
+        <th
+          class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4 max-[660px]:hidden">
+          Duration</th>
+        <th class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
+          Favourite</th>
+      </tr>
+    </thead>
+
+    <!-- Table Body -->
+    <tbody class="text-white/60 text-sm divide-y divide-gray-200">
+      <% songs.forEach((song, idx)=> { %>
+        <tr>
+          <td class="whitespace-nowrap py-2">
+            <%= idx + 1 %>
+          </td>
+          <td class="whitespace-nowrap py-2">
+            <img src="<%= song.poster %>" alt="<%= song.title %>" class="w-12 h-12 object-cover rounded">
+          </td>
+          <td class=" whitespace-nowrap overflow-hidden text-ellipsis py-2 max-[750px]:max-w-[140px]">
+            <a href="<%= song.url %>">
+              <%= song.title %>
+            </a>
+          </td>
+          <td class="whitespace-nowrap text-ellipsis py-2">
+            <%= song.artist %>
+          </td>
+          <td class="whitespace-nowrap py-2 max-[750px]:hidden">
+            <%= song.year %>
+          </td>
+          <td class="whitespace-nowrap py-2 max-[660px]:hidden">
+            <%= song.duration %>
+          </td>
+          <td class="whitespace-nowrap py-2">
+            <% let isFav=user.favourites.includes(song._id); %>
+              <form id="fav-form" action="/home/favourite" method="post">
+                <i class="<%= isFav ? 'ri-heart-fill' : 'ri-heart-line' %> text-red-500 cursor-pointer fav-icon"
+                  id="fav-icon-<%= song._id %>" data-song-id="<%= song._id %>"></i>
+              </form>
+          </td>
+        </tr>
+        <% }); %>
+    </tbody>
+  </table>
+</div>

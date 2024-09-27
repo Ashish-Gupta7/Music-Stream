@@ -54,6 +54,8 @@ const postUploadTrack = async (req, res) => {
         duration: duration,
         url: relativeTrackUrl,
         poster: posterData,
+        album: metadata.common.album,
+        allArtists: metadata.common.artists,
       };
     });
 

@@ -1,0 +1,21 @@
+<div class="menu h-full p-10 pr-16 relative max-[1000px]:h-fit max-[1000px]:w-full max-[1000px]:p-6 max-[660px]:px-3">
+  <div class="bg-anim1 absolute bg-emerald-600/20 bottom-0 left-0 -z-10 max-[1000px]:top-60"></div>
+  <div class="bg-anim1 absolute bg-emerald-600/20 top-7 left-40 -z-10 max-[1000px]:top-0"></div>
+  <div class="flex flex-col gap-8 max-[1000px]:flex-row max-[1000px]:justify-between max-[1000px]:relative">
+    <div class="select-none h-6 flex flex-row items-center gap-3 tracking-widest text-emerald-500 font-semibold">
+      <i class="ri-music-2-line"></i>
+      Music
+    </div>
+
+    <!-- 1000px minus -> menu -->
+    <div class="hidden cursor-pointer max-[1000px]:block max-[1000px]:text-white max-[1000px]:text-lg">
+      <i class="menu-button ri-menu-4-line"></i>
+    </div>
+
+    <!-- 1000px minus -> after click on menu-button -->
+    <%- include("./menuResponsive/minus1000.ejs") %>
+
+      <!-- 1000px plus -> menu-bar -->
+      <%- include("./menuResponsive/plus1000.ejs") %>
+  </div>
+</div>
