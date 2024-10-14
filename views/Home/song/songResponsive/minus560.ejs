@@ -8,7 +8,7 @@
           </div>
           <div class="flex flex-col items-start">
             <div
-              class="text-white whitespace-nowrap overflow-hidden text-ellipsis max-[340px]:text-sm max-[340px]:max-w-[150px] max-[560px]:max-w-[300px]">
+              class="text-white whitespace-nowrap overflow-hidden text-ellipsis max-[340px]:text-sm max-[340px]:max-w-[150px] max-[400px]:max-w-[200px] max-[560px]:max-w-[300px]">
               <a href="<%= song.url %>">
                 <%= song.title %>
               </a>
@@ -38,37 +38,37 @@
           </div>
           <div class="flex items-center justify-between">
             <div class="font-mono">Title/-</div>
-            <div class="text-sm">
+            <div class="text-sm text-right">
               <%= song.title %>
             </div>
           </div>
           <div class="flex items-center justify-between">
             <div class="font-mono">Artist/-</div>
-            <div class="text-sm">
+            <div class="text-sm text-right">
               <%= song.artist %>
             </div>
           </div>
           <div class="flex items-center justify-between">
             <div class="font-mono">Artists/-</div>
-            <div class="text-sm">
+            <div class="text-sm text-right">
               <%= song.allArtists %>
             </div>
           </div>
           <div class="flex items-center justify-between">
             <div class="font-mono">Album/-</div>
-            <div class="text-sm">
+            <div class="text-sm text-right">
               <%= song.album %>
             </div>
           </div>
           <div class="flex items-center justify-between">
             <div class="font-mono">Year/-</div>
             <div class="text-sm">
-              <%= song.year %>
+              text-right <%= song.year %>
             </div>
           </div>
           <div class="flex items-center justify-between">
             <div class="font-mono">Duration/-</div>
-            <div class="text-sm">
+            <div class="text-sm text-right">
               <%= song.duration %>
             </div>
           </div>

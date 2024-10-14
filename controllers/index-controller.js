@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 const dbgr = require("debug")("development:auth");
 
 const { userValidate, userModel } = require("../models/user-model");
-
 const { generateToken } = require("../utils/index-token-utils");
 const trackModel = require("../models/track-model");
 
@@ -20,9 +19,10 @@ const postRegisterController = async (req, res) => {
     let user = await userModel.findOne({ email });
 
     if (user) {
-      return res
-        .status(409)
-        .render("error", { err: "User already exists.", status: 409 });
+      return res.status(409).render("error", {
+        err: "User with this email already exists.",
+        status: 409,
+      });
     }
 
     let err = userValidate({ username, email, password });
@@ -34,7 +34,7 @@ const postRegisterController = async (req, res) => {
       if (err) {
         dbgr(`Error during genSalt: ${err.message}`);
         return res.status(500).render("error", {
-          err: "Error in password encryption.",
+          err: "An error occurred on the server. Please try again later.",
           status: 500,
         });
       }
@@ -43,7 +43,7 @@ const postRegisterController = async (req, res) => {
         if (err) {
           dbgr(`Error during password hashing: ${err.message}`);
           return res.status(500).render("error", {
-            err: "Error in password hashing.",
+            err: "An error occurred on the server. Please try again later.",
             status: 500,
           });
         }
@@ -58,12 +58,13 @@ const postRegisterController = async (req, res) => {
           res.cookie("token", token, {
             httpOnly: true,
           });
-          res.redirect("/");
+          res.status(201).redirect("/");
         } catch (err) {
           dbgr(`Error during user creation: ${err.message}`);
-          return res
-            .status(500)
-            .render("error", { err: "Failed to create user.", status: 500 });
+          return res.status(500).render("error", {
+            err: "An error occurred on the server. Please try again later.",
+            status: 500,
+          });
         }
       });
     });
@@ -82,32 +83,32 @@ const postLoginController = async (req, res) => {
 
     if (!user) {
       return res.status(401).render("error", {
-        err: "Invalid email or password.",
+        err: "Incorrect email or password.",
         status: 401,
       });
     }
-    try {
-      bcrypt.compare(password, user.password, (err, result) => {
-        if (err) return err.message;
-        if (result) {
-          const token = generateToken(user);
-          res.cookie("token", token, {
-            httpOnly: true,
-          });
-          res.redirect("/");
-        } else {
-          res.status(401).render("error", {
-            err: "Invalid email or password.",
-            status: 401,
-          });
-        }
-      });
-    } catch (err) {
-      dbgr(`Error during bcrypt-compare: ${err.message}`);
-      return res
-        .status(500)
-        .render("error", { err: "Internal server error.", status: 500 });
-    }
+
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (err) {
+        dbgr(`Error comparing passwords: ${err.message}`);
+        return res.status(500).render("error", {
+          err: "An error occurred on the server. Please try again later.",
+          status: 500,
+        });
+      }
+      if (result) {
+        const token = generateToken(user);
+        res.cookie("token", token, {
+          httpOnly: true,
+        });
+        res.status(200).redirect("/");
+      } else {
+        res.status(401).render("error", {
+          err: "Incorrect email or password.",
+          status: 401,
+        });
+      }
+    });
   } catch (err) {
     dbgr(`Error during login: ${err.message}`);
     return res
@@ -117,45 +118,77 @@ const postLoginController = async (req, res) => {
 };
 
 const logoutController = (req, res) => {
-  res.cookie("token", "");
-  res.redirect("/");
+  try {
+    res.cookie("token", "");
+    res.status(200).redirect("/");
+  } catch (err) {
+    dbgr(`Error during logout: ${err.message}`);
+    res.status(500).render("error", {
+      err: "Internal server error. Please try again later.",
+      status: 500,
+    });
+  }
 };
 
 const homeController = async (req, res) => {
-  res.redirect("/home");
+  try {
+    res.redirect("/home");
+  } catch (err) {
+    dbgr(`Error redirecting to home: ${err.message}`);
+    res.status(500).render("error", {
+      err: "Internal server error. Please try again later.",
+      status: 500,
+    });
+  }
 };
 
 const showHomePageController = async (req, res) => {
-  let songs = await trackModel.find();
-  let user = await userModel.findOne({ _id: req.user.id });
+  try {
+    let songs = await trackModel.find();
+    let user = await userModel.findOne({ _id: req.user.id });
 
-  res.render("home", {
-    isUploader: req.user.isUploader,
-    username: req.user.username,
-    songs,
-    user,
-  });
+    res.status(200).render("home", {
+      isUploader: req.user.isUploader,
+      username: req.user.username,
+      songs,
+      user,
+    });
+  } catch (err) {
+    dbgr(`Error rendering homepage: ${err.message}`);
+    res.status(500).render("error", {
+      err: "Unable to load the homepage. Please try again later.",
+      status: 500,
+    });
+  }
 };
 
 const showHomeAfterSearch = async (req, res) => {
-  let songs = await trackModel.find();
-  let searchQuery = req.query.search.toLowerCase();
-  let searchedSong = songs.filter((song) =>
-    song.title.toLowerCase().includes(searchQuery)
-  );
-  let remainingSongs = songs.filter(
-    (song) => !song.title.toLowerCase().includes(searchQuery)
-  );
-  let updatedSongs = [...searchedSong, ...remainingSongs];
+  try {
+    let songs = await trackModel.find();
+    let searchQuery = req.query.search.toLowerCase();
+    let searchedSong = songs.filter((song) =>
+      song.title.toLowerCase().includes(searchQuery)
+    );
+    let remainingSongs = songs.filter(
+      (song) => !song.title.toLowerCase().includes(searchQuery)
+    );
+    let updatedSongs = [...searchedSong, ...remainingSongs];
 
-  let user = await userModel.findOne({ _id: req.user.id });
+    let user = await userModel.findOne({ _id: req.user.id });
 
-  res.render("home", {
-    isUploader: req.user.isUploader,
-    username: req.user.username,
-    songs: updatedSongs,
-    user,
-  });
+    res.status(200).render("home", {
+      isUploader: req.user.isUploader,
+      username: req.user.username,
+      songs: updatedSongs,
+      user,
+    });
+  } catch (err) {
+    dbgr(`Error processing search: ${err.message}`);
+    res.status(500).render("error", {
+      err: "Internal server error while searching. Please try again later.",
+      status: 500,
+    });
+  }
 };
 
 const uploaderHomeUpdate = async (req, res) => {
@@ -172,10 +205,7 @@ const uploaderHomeUpdate = async (req, res) => {
           isUploader: uploader,
         }
       );
-      return res.redirect("/");
-    } else {
-      dbgr(`uploader false during uploaderHomeUpdate`);
-      return res.redirect("/");
+      return res.status(200).redirect("/");
     }
   } catch (err) {
     dbgr(`Error during uploaderHomeUpdate: ${err.message}`);
@@ -188,7 +218,6 @@ const uploaderHomeUpdate = async (req, res) => {
 const addFavouriteSong = async (req, res) => {
   try {
     const { songId, isFav } = req.body;
-
     const userId = req.user.id;
 
     const user = await userModel.findById(userId);
@@ -205,8 +234,9 @@ const addFavouriteSong = async (req, res) => {
     }
 
     await user.save();
-    res.json({ message: "Favourite status updated successfully!" });
+    res.status(200).json({ message: "Favourite status updated successfully!" });
   } catch (error) {
+    dbgr(`Error updating favourite status: ${err.message}`);
     res.status(500).json({ message: "Failed to update favourite status" });
   }
 };

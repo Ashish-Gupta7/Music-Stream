@@ -6,7 +6,14 @@ const path = require("path");
 const fs = require("fs");
 
 const getUploadPage = (req, res) => {
-  res.render("upload");
+  try {
+    res.status(200).render("upload");
+  } catch (err) {
+    dbgr(`Error in getUploadPage: ${err.message}`);
+    res
+      .status(500)
+      .render("error", { err: "Internal Server Error", status: 500 });
+  }
 };
 
 const postUploadTrack = async (req, res) => {
@@ -45,7 +52,9 @@ const postUploadTrack = async (req, res) => {
 
       let duration = `${Math.floor(metadata.format.duration / 60)}:${Math.floor(
         metadata.format.duration % 60
-      )}`;
+      )
+        .toString()
+        .padStart(2, "0")}`;
 
       return {
         title: metadata.common.title,
@@ -67,10 +76,10 @@ const postUploadTrack = async (req, res) => {
 
     const skippedTracks = tracks.filter((track) => track.skip);
     if (skippedTracks.length > 0) {
-      return res.render("skip", { skippedTracks });
+      return res.status(200).render("skip", { skippedTracks });
     }
 
-    return res.redirect("/");
+    return res.status(201).redirect("/");
   } catch (err) {
     dbgr(`Error During postUploadTrack: ${err.message}`);
     res
@@ -82,9 +91,12 @@ const postUploadTrack = async (req, res) => {
 const showAllSongs = async (req, res) => {
   try {
     let songs = await trackModel.find();
-    res.render("songs", { songs });
+    res.status(200).render("songs", { songs });
   } catch (err) {
-    res.send(err.message);
+    dbgr(`Error in showAllSongs: ${err.message}`);
+    res
+      .status(500)
+      .render("error", { err: "Internal Server Error", status: 500 });
   }
 };
 
@@ -92,10 +104,16 @@ const addOtherSongs = async (req, res) => {
   try {
     let playlistId = req.params.playlistId;
     let playlist = await playlistModel.findOne({ _id: playlistId });
+    if (!playlist) {
+      return res
+        .status(404)
+        .render("error", { err: "Playlist Not Found", status: 404 });
+    }
+
     let tracks = playlist.tracks;
     if (tracks.length === 0) {
       let songs = await trackModel.find();
-      res.render("songs", { songs, playlistId: playlist._id });
+      res.status(200).render("songs", { songs, playlistId: playlist._id });
     } else if (tracks.length > 0) {
       let playlistTracks = await playlistModel
         .findOne({ _id: playlistId })
@@ -104,11 +122,16 @@ const addOtherSongs = async (req, res) => {
       let availableTracks = await trackModel.find({
         _id: { $nin: existingTrackIds },
       });
-      res.render("songs", { songs: availableTracks, playlistId });
+      res.status(200).render("songs", { songs: availableTracks, playlistId });
     }
 
     res.send("play");
-  } catch (err) {}
+  } catch (err) {
+    dbgr(`Error in addOtherSongs: ${err.message}`);
+    res
+      .status(500)
+      .render("error", { err: "Internal Server Error", status: 500 });
+  }
 };
 
 module.exports = {

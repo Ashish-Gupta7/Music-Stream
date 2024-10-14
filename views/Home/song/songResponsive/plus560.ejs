@@ -11,7 +11,7 @@
         <th class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
           Title</th>
         <th class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4">
-          Artist</th>
+          &nbsp; Artist</th>
         <th
           class="sticky bg-black top-0 z-10 text-left text-sm font-mono font-semibold uppercase tracking-widest pb-4 max-[750px]:hidden">
           Year</th>
@@ -33,13 +33,13 @@
           <td class="whitespace-nowrap py-2">
             <img src="<%= song.poster %>" alt="<%= song.title %>" class="w-12 h-12 object-cover rounded">
           </td>
-          <td class=" whitespace-nowrap overflow-hidden text-ellipsis py-2 max-[750px]:max-w-[140px]">
+          <td class=" whitespace-nowrap max-w-[140px] overflow-hidden text-ellipsis py-2 max-[750px]:max-w-[140px]">
             <a href="<%= song.url %>">
               <%= song.title %>
             </a>
           </td>
           <td class="whitespace-nowrap text-ellipsis py-2">
-            <%= song.artist %>
+            &nbsp;&nbsp;&nbsp; <%= song.artist %>
           </td>
           <td class="whitespace-nowrap py-2 max-[750px]:hidden">
             <%= song.year %>
