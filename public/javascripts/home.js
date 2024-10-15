@@ -82,12 +82,28 @@ function addRemoveFavSong() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Favorite status updated:", data);
+          // console.log("Favorite status updated");
         })
         .catch((error) => {
-          console.error("Error updating favorite status:", error);
+          // console.error("Something went wrong.");
         });
     });
   });
 }
 addRemoveFavSong();
+
+function playlistFuctionalities() {
+  let createNewPlaylist = document.querySelectorAll(".create-new-playlist");
+  let showCreatePlaylist = document.querySelector(".show-create-playlist");
+  let closeCreatePlaylist = document.querySelector(".close-create-playlist");
+
+  createNewPlaylist.forEach((elm) => {
+    elm.addEventListener("click", function () {
+      showCreatePlaylist.classList.remove("hidden");
+    });
+  });
+  closeCreatePlaylist.addEventListener("click", function () {
+    showCreatePlaylist.classList.add("hidden");
+  });
+}
+playlistFuctionalities();

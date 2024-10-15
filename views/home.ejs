@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/stylesheets/home.css">
 </head>
 
-<body class="overflow-hidden selection:text-emerald-700">
+<body class="relative overflow-hidden selection:text-emerald-700">
 
   <div class="w-full h-full bg-[#101010] flex flex-row items-start max-[1000px]:flex-col">
 
@@ -21,6 +21,7 @@
       <%- include("./Home/song/song.ejs") %>
   </div>
 
+  <div class="show-create-playlist absolute top-0 left-0 w-full h-full hidden"><%- include("./createPlaylist.ejs") %>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
