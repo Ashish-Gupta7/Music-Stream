@@ -63,3 +63,15 @@ body {
 .isfav i {
   color: red; /* Changes the heart icon color when it's a favorite */
 }
+
+.create-playlist {
+  backdrop-filter: blur(9px) saturate(133%);
+  -webkit-backdrop-filter: blur(15px) saturate(133%);
+  background-color: rgba(42, 164, 120, 0.1);
+}
+
+.select-playlist {
+  border-radius: 0px;
+  background: #282828;
+  box-shadow: 10px 10px 20px #202020, -10px -10px 20px #202020;
+}

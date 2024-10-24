@@ -107,3 +107,57 @@ function playlistFuctionalities() {
   });
 }
 playlistFuctionalities();
+
+let uploadImg = document.querySelector(".upload-img");
+let musicIcon = document.querySelector(".music-icon");
+let imgIcon = document.querySelector(".img-icon");
+let selectPlaylistLeft = document.querySelector(".select-playlist-left");
+let playlistEditMenu = document.querySelector(".playlist-edit-menu");
+let chooseOptions = document.querySelector(".choose-options");
+let imageInput = document.querySelector("#image");
+let uploadedImage = document.querySelector("#uploadedImage");
+let changeImage = document.querySelector(".change-image");
+let deleteImage = document.querySelector(".delete-image");
+let errorMessage = document.querySelector(".img-error-message");
+let playlistFrom = document.querySelector(".playlist-form");
+
+uploadImg.addEventListener("mouseenter", function () {
+  musicIcon.classList.add("hidden");
+  imgIcon.classList.remove("hidden");
+  uploadedImage.classList.add("hidden");
+});
+
+uploadImg.addEventListener("mouseleave", function () {
+  musicIcon.classList.remove("hidden");
+  imgIcon.classList.add("hidden");
+  uploadedImage.classList.remove("hidden");
+});
+
+imageInput.addEventListener("change", function (event) {
+  const file = event.target.files[0];
+  if (file) {
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      errorMessage.innerText = "Please upload a JPG, JPEG, or PNG file!";
+      errorMessage.classList.remove("hidden");
+      imageInput.value = "";
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      errorMessage.innerText = "File size must be less than 2MB!";
+      errorMessage.classList.remove("hidden");
+      imageInput.value = "";
+      return;
+    }
+
+    errorMessage.classList.add("hidden");
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      uploadedImage.src = e.target.result;
+      uploadedImage.classList.add("h-full", "w-full");
+    };
+    reader.readAsDataURL(file);
+  }
+});

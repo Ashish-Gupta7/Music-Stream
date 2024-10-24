@@ -4,7 +4,11 @@ const crypto = require("crypto");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/music");
+    if (file.fieldname === "track") {
+      cb(null, "./public/music");
+    } else if (file.fieldname === "image") {
+      cb(null, "./public/images/picture");
+    }
   },
   filename: function (req, file, cb) {
     crypto.randomBytes(12, (err, buf) => {
@@ -17,6 +21,9 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage }).array("track", 5);
+const upload = multer({ storage: storage }).fields([
+  { name: "track", maxCount: 5 },
+  { name: "image", maxCount: 1 },
+]);
 
 module.exports = upload;

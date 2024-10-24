@@ -19,9 +19,8 @@ const {
   redirectIfLoggedIn,
 } = require("../middlewares/login-middleware");
 
-// checking ejs page
-router.get("/createplaylist", isLoggedIn, (req, res) => {
-  res.render("createPlaylist");
+router.post("/check", (req, res) => {
+  console.log(req.body);
 });
 
 router.get("/", isLoggedIn, homeController);

@@ -1,0 +1,44 @@
+<div class="show-create-playlist absolute top-0 left-0 w-full h-full hidden">
+  <div class="create-playlist w-full h-full flex items-center justify-center">
+    <div class="bg-[#282828] w-[400px] px-5 py-4 rounded-md flex flex-col items-start gap-4">
+      <div class="w-full flex items-center justify-between">
+        <h1 class="text-xl font-semibold text-white">
+          Create Playlist
+        </h1>
+        <i class="close-create-playlist ri-close-line text-lg cursor-pointer font-semibold text-white"></i>
+      </div>
+
+      <!-- Form -->
+      <form action="/playlist/create" method="post" enctype="multipart/form-data"
+        class="playlist-form w-full flex items-start justify-between">
+
+        <!-- form left-part -->
+        <div
+          class="select-playlist select-playlist-left relative drop-shadow-md h-36 w-[40%] flex items-center justify-center rounded">
+          <label class="upload-img w-full h-full flex items-center justify-center cursor-pointer" for="image">
+            <i class="music-icon ri-music-2-line absolute text-[#464646] text-4xl font-semibold"></i>
+            <img id="uploadedImage" class="uploaded-img z-10 pointer-events-none object-cover" />
+            <div class="img-icon absolute hidden flex items-center flex-col cursor-pointer text-white">
+              <i class="ri-file-image-line text-xl"></i>
+              <div class="text-sm">Choose Image</div>
+            </div>
+          </label>
+          <input class="hidden" type="file" name="image" id="image" accept=".jpg, .jpeg, .png">
+        </div>
+
+        <!-- form right-part -->
+        <div class="w-[55%] select-playlist h-36 rounded px-3 py-2 flex items-end flex-col justify-between">
+          <div>
+            <label class="text-sm text-white/50" for="playlist-name">Name</label>
+            <input
+              class="w-full mt-2 h-7 rounded-sm bg-[#3E3E3E] text-white text-sm px-2 outline-none border border-[#3E3E3E] focus:border-white/50"
+              type="text" name="name" value="# My Playlist" id="playlist-name">
+          </div>
+          <input class="bg-white rounded-full px-6 py-1 cursor-pointer" type="submit" value="Save">
+        </div>
+
+      </form>
+      <p class="img-error-message text-red-500 hidden"></p>
+    </div>
+  </div>
+</div>

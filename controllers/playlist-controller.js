@@ -2,44 +2,99 @@ const playlistModel = require("../models/playlist-model");
 const trackModel = require("../models/track-model");
 const { userModel } = require("../models/user-model");
 const dbgr = require("debug")("development:playlistController");
+const upload = require("../config/multer-config");
+const fs = require("fs");
+const path = require("path");
+const { log } = require("console");
 
 const getCreatePlaylist = (req, res) => {
   res.status(200).render("playlist");
 };
 
-const postCreatePlaylist = async (req, res) => {
-  try {
-    let user = req.user;
-    let { name } = req.body;
+const postCreatePlaylist = (req, res) => {
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ message: err.message });
+    }
 
-    let newPlaylist = await playlistModel.create({
-      name,
-      user: user._id,
-    });
+    try {
+      let user = req.user;
+      let { name } = req.body;
 
-    await userModel.findOneAndUpdate(
-      { _id: user._id },
-      {
-        $push: {
-          playlists: newPlaylist._id,
+      let image = req.files["image"] ? req.files["image"][0].filename : null;
+
+      let newPlaylist = await playlistModel.create({
+        name,
+        poster: image,
+        user: user._id,
+      });
+
+      await userModel.findOneAndUpdate(
+        { _id: user._id },
+        {
+          $push: {
+            playlists: newPlaylist._id,
+          },
         },
-      },
-      { new: true }
+        { new: true }
+      );
+
+      return res.status(201).redirect("/");
+    } catch (err) {
+      dbgr(`Error during playlist creation: ${err.message}`);
+      return res.status(500).render("error", {
+        err: "Failed to create playlist. Please try again later.",
+        status: 500,
+      });
+    }
+  });
+};
+
+const postUpdatePlaylist = (req, res) => {
+  const action = req.body.action;
+
+  if (action === "change" && req.files) {
+    // Handling image change
+    const newImage = req.files["image"][0];
+    const imagePath = path.join(
+      __dirname,
+      "../public/image/picture",
+      "profile.jpg"
     );
 
-    return res.status(201).redirect("/playlist");
-  } catch (err) {
-    dbgr(`Error during playlist creation: ${err.message}`);
-    return res.status(500).render("error", {
-      err: "Failed to create playlist. Please try again later.",
-      status: 500,
-    });
+    // Delete existing image
+    if (fs.existsSync(imagePath)) {
+      fs.unlinkSync(imagePath);
+    }
+
+    // Save new image
+    fs.renameSync(newImage.path, imagePath);
+    return res.json({ success: true, message: "Image updated successfully." });
+  } else if (action === "delete") {
+    // Handling image delete
+    const imagePath = path.join(
+      __dirname,
+      "../public/image/picture",
+      "profile.jpg"
+    );
+
+    if (fs.existsSync(imagePath)) {
+      fs.unlinkSync(imagePath);
+      return res.json({
+        success: true,
+        message: "Image deleted successfully.",
+      });
+    }
+    return res.json({ success: false, message: "No image to delete." });
   }
+
+  return res.json({ success: false, message: "Invalid action." });
 };
 
 const showPlaylist = async (req, res) => {
   try {
     let playlistIds = req.user.playlists;
+    let context = "edit-playlist"; // dynamically rendering createPlaylist page
 
     // Use Promise.all to handle multiple asynchronous operations
 
@@ -59,14 +114,27 @@ const showPlaylist = async (req, res) => {
       })
     );
 
-    let username = req.user.username;
-    res.status(200).render("showPlaylist", { playlists, username });
+    playlists = playlists.filter((elm) => elm !== null);
+
+    let user = req.user;
+    res.status(200).render("showPlaylist", { playlists, user, context });
   } catch (err) {
     dbgr(`Error during fetching playlists: ${err.message}`);
     return res.status(500).render("error", {
       err: "Failed to load playlists. Please try again later.",
       status: 500,
     });
+  }
+};
+
+const returnIndexData = (req, res) => {
+  try {
+    let useIndex = req.body.useIndex;
+    console.log(useIndex);
+
+    res.json({ data: useIndex });
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -163,8 +231,10 @@ const playlistRemoveTrack = async (req, res) => {
 module.exports = {
   getCreatePlaylist,
   postCreatePlaylist,
+  postUpdatePlaylist,
   showPlaylist,
   showAllPlaylistSongs,
   playlistAddTrack,
   playlistRemoveTrack,
+  returnIndexData,
 };

@@ -10,13 +10,19 @@ const {
   showAllPlaylistSongs,
   playlistAddTrack,
   playlistRemoveTrack,
+  postUpdatePlaylist,
+  returnIndexData,
 } = require("../controllers/playlist-controller");
 
 router.get("/", isLoggedIn, getCreatePlaylist);
 
 router.post("/create", isLoggedIn, postCreatePlaylist);
 
+router.post("/update", isLoggedIn, postUpdatePlaylist);
+
 router.get("/show", isLoggedIn, showPlaylist);
+
+router.post("/returnIndexData", isLoggedIn, returnIndexData);
 
 router.get("/songs/:playlistId", isLoggedIn, showAllPlaylistSongs);
 
