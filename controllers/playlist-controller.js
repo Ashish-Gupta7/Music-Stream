@@ -5,7 +5,6 @@ const dbgr = require("debug")("development:playlistController");
 const upload = require("../config/multer-config");
 const fs = require("fs");
 const path = require("path");
-const { log } = require("console");
 
 const getCreatePlaylist = (req, res) => {
   res.status(200).render("playlist");
@@ -51,50 +50,46 @@ const postCreatePlaylist = (req, res) => {
 };
 
 const postUpdatePlaylist = (req, res) => {
-  const action = req.body.action;
-
-  if (action === "change" && req.files) {
-    // Handling image change
-    const newImage = req.files["image"][0];
-    const imagePath = path.join(
-      __dirname,
-      "../public/image/picture",
-      "profile.jpg"
-    );
-
-    // Delete existing image
-    if (fs.existsSync(imagePath)) {
-      fs.unlinkSync(imagePath);
+  upload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ message: err.message });
     }
 
-    // Save new image
-    fs.renameSync(newImage.path, imagePath);
-    return res.json({ success: true, message: "Image updated successfully." });
-  } else if (action === "delete") {
-    // Handling image delete
-    const imagePath = path.join(
-      __dirname,
-      "../public/image/picture",
-      "profile.jpg"
-    );
+    try {
+      let { playlistId } = req.params;
+      let { name } = req.body;
 
-    if (fs.existsSync(imagePath)) {
-      fs.unlinkSync(imagePath);
-      return res.json({
-        success: true,
-        message: "Image deleted successfully.",
+      let image = req.files["image"] ? req.files["image"][0].filename : null;
+
+      let playlist = await playlistModel.findById(playlistId);
+      if (!playlist) {
+        return res.status(404).json({ message: "Playlist not found" });
+      }
+
+      if (image) {
+        playlist.poster = image;
+      }
+
+      if (name) {
+        playlist.name = name;
+      }
+
+      await playlist.save();
+
+      return res.status(200).redirect("/playlist/show");
+    } catch (err) {
+      dbgr(`Error during playlist update: ${err.message}`);
+      return res.status(500).render("error", {
+        err: "Failed to update playlist. Please try again later.",
+        status: 500,
       });
     }
-    return res.json({ success: false, message: "No image to delete." });
-  }
-
-  return res.json({ success: false, message: "Invalid action." });
+  });
 };
 
 const showPlaylist = async (req, res) => {
   try {
     let playlistIds = req.user.playlists;
-    let context = "edit-playlist"; // dynamically rendering createPlaylist page
 
     // Use Promise.all to handle multiple asynchronous operations
 
@@ -117,24 +112,13 @@ const showPlaylist = async (req, res) => {
     playlists = playlists.filter((elm) => elm !== null);
 
     let user = req.user;
-    res.status(200).render("showPlaylist", { playlists, user, context });
+    res.status(200).render("showPlaylist", { playlists, user });
   } catch (err) {
     dbgr(`Error during fetching playlists: ${err.message}`);
     return res.status(500).render("error", {
       err: "Failed to load playlists. Please try again later.",
       status: 500,
     });
-  }
-};
-
-const returnIndexData = (req, res) => {
-  try {
-    let useIndex = req.body.useIndex;
-    console.log(useIndex);
-
-    res.json({ data: useIndex });
-  } catch (err) {
-    console.log(err);
   }
 };
 
@@ -236,5 +220,4 @@ module.exports = {
   showAllPlaylistSongs,
   playlistAddTrack,
   playlistRemoveTrack,
-  returnIndexData,
 };

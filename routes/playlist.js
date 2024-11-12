@@ -11,18 +11,19 @@ const {
   playlistAddTrack,
   playlistRemoveTrack,
   postUpdatePlaylist,
-  returnIndexData,
 } = require("../controllers/playlist-controller");
+
+router.get("/check", isLoggedIn, (req, res) => {
+  res.render("checkPlaylist.ejs");
+});
 
 router.get("/", isLoggedIn, getCreatePlaylist);
 
 router.post("/create", isLoggedIn, postCreatePlaylist);
 
-router.post("/update", isLoggedIn, postUpdatePlaylist);
+router.post("/update/:playlistId", isLoggedIn, postUpdatePlaylist);
 
 router.get("/show", isLoggedIn, showPlaylist);
-
-router.post("/returnIndexData", isLoggedIn, returnIndexData);
 
 router.get("/songs/:playlistId", isLoggedIn, showAllPlaylistSongs);
 

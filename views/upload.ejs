@@ -8,15 +8,23 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<style>
+  .upload {
+    backdrop-filter: blur(8px) saturate(131%);
+    -webkit-backdrop-filter: blur(8px) saturate(131%);
+    background-color: rgba(0, 0, 0, 0.72);
+  }
+</style>
 
-  <div class="bg-white shadow-md rounded-lg p-8 max-w-lg w-full">
-    <h1 class="text-2xl font-semibold text-center mb-6">Upload Your Track</h1>
+<body class="bg-[#101010] min-h-screen flex items-center justify-center">
+
+  <div class="upload shadow-md rounded-lg p-8 max-w-lg w-full">
+    <h1 class="text-2xl font-semibold text-white text-center mb-6">Upload Your Track</h1>
 
     <form id="uploadForm" action="/music/upload" method="POST" enctype="multipart/form-data" class="space-y-4">
       <!-- Track File -->
       <div>
-        <label for="track" class="block text-sm font-medium text-gray-700">Upload Track</label>
+        <label for="track" class="block text-sm font-medium text-gray-300">Upload Track</label>
         <input type="file" id="track" name="track"
           class="mt-1 block w-full px-4 py-2 text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           multiple accept="audio/*">
@@ -26,7 +34,7 @@
       <!-- Submit Button -->
       <div class="text-center">
         <button type="submit"
-          class="w-full bg-indigo-600 hover:bg-indigo-700 text-black py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Upload Track
         </button>
       </div>

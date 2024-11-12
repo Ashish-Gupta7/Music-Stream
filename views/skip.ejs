@@ -8,17 +8,28 @@
   <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 
-<body>
-  <h2>Following songs were already uploaded:</h2>
-  <ul>
-    <% skippedTracks.forEach(track=> { %>
-      <li>
-        <%= track.title %>
-      </li>
-      <% }) %>
-  </ul>
-  <a href="">Skip and continue</a>
+<style>
+  .skip {
+    backdrop-filter: blur(8px) saturate(131%);
+    -webkit-backdrop-filter: blur(8px) saturate(131%);
+    background-color: rgba(0, 0, 0, 0.72);
+  }
+</style>
 
+<body class="bg-[#101010] text-white h-screen w-full flex items-center justify-center">
+  <div class="skip w-1/2 h-fit flex flex-col items-center justify-center p-4 gap-6">
+    <div class="w-full flex items-center justify-center gap-4">
+      <h2 class="w-full">Following songs were already uploaded:</h2>
+      <ul class="bg-emerald-900 w-full p-4">
+        <% skippedTracks.forEach(track=> { %>
+          <li>
+            <%= track.title %>
+          </li>
+          <% }) %>
+      </ul>
+    </div>
+    <a href="/home" class="bg-gray-700 text-white px-4 py-2">Skip and continue</a>
+  </div>
 </body>
 
 </html>

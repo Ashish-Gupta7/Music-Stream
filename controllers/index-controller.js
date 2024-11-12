@@ -146,14 +146,12 @@ const showHomePageController = async (req, res) => {
   try {
     let songs = await trackModel.find();
     let user = await userModel.findOne({ _id: req.user.id });
-    let context = "create-playlist"; // dynamically rendering createPlaylist page
 
     res.status(200).render("home", {
       isUploader: req.user.isUploader,
       username: req.user.username,
       songs,
       user,
-      context,
     });
   } catch (err) {
     dbgr(`Error rendering homepage: ${err.message}`);

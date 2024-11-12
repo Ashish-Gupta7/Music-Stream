@@ -44,12 +44,8 @@ body {
   backdrop-filter: blur(9px) saturate(0%);
   -webkit-backdrop-filter: blur(9px) saturate(0%);
   background-color: rgba(6, 95, 70, 0.71);
-  /* backdrop-filter: blur(9px) saturate(0%);
-  -webkit-backdrop-filter: blur(9px) saturate(0%);
-  background-color: rgba(0, 0, 0, 0.71); */
 }
 
-/* Styling for the heart icon animation */
 .heart-icon {
   position: absolute;
   width: 30px;
@@ -61,7 +57,7 @@ body {
 }
 
 .isfav i {
-  color: red; /* Changes the heart icon color when it's a favorite */
+  color: red;
 }
 
 .create-playlist {
