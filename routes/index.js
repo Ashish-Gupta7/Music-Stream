@@ -12,6 +12,8 @@ const {
   showHomePageController,
   showHomeAfterSearch,
   addFavouriteSong,
+  getProfileController,
+  postUploaderController,
 } = require("../controllers/index-controller");
 
 const {
@@ -42,5 +44,9 @@ router.get("/home", isLoggedIn, showHomePageController);
 router.get("/home/search", isLoggedIn, showHomeAfterSearch);
 
 router.post("/home/favourite", isLoggedIn, addFavouriteSong);
+
+router.get("/profile", isLoggedIn, getProfileController);
+
+router.post("/profile/uploader", isLoggedIn, postUploaderController);
 
 module.exports = router;

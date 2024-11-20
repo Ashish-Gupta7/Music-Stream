@@ -241,6 +241,40 @@ const addFavouriteSong = async (req, res) => {
   }
 };
 
+const getProfileController = (req, res) => {
+  try {
+    let user = req.user;
+    res.status(200).render("profile", { user });
+  } catch (err) {
+    dbgr(`Error during getProfileController: ${err.message}`);
+    return res
+      .status(500)
+      .render("error", { err: "Internal Server Error", status: 500 });
+  }
+};
+
+const postUploaderController = async (req, res) => {
+  try {
+    let user = req.user;
+    const fUser = await userModel.findById(user._id);
+
+    if (user.isUploader) {
+      fUser.isUploader = false;
+      await fUser.save();
+      res.status(200).redirect("/profile");
+    } else {
+      fUser.isUploader = true;
+      await fUser.save();
+      res.status(200).redirect("/profile");
+    }
+  } catch (err) {
+    dbgr(`Error during postUploaderController: ${err.message}`);
+    return res
+      .status(500)
+      .render("error", { err: "Internal Server Error", status: 500 });
+  }
+};
+
 module.exports = {
   getLoginController,
   getRegisterController,
@@ -252,4 +286,6 @@ module.exports = {
   showHomePageController,
   showHomeAfterSearch,
   addFavouriteSong,
+  getProfileController,
+  postUploaderController,
 };
