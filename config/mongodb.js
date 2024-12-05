@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const dbgr = require("debug")("development:mongoDB");
 
-const dbURI = process.env.MONGO_DB_URI;
+const dbURI = process.env.mon;
 
 mongoose
   .connect(dbURI, {
