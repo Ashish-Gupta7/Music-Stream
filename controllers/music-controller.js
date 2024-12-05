@@ -25,6 +25,7 @@ const postUploadTrack = async (req, res) => {
         .status(400)
         .render("error", { err: "No Files Uploaded!", status: 400 });
     }
+    console.log(files);
 
     const trackDataPromises = files.track.map(async (file) => {
       const relativeTrackUrl = `/music/${file.filename}`;
