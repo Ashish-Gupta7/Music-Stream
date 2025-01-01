@@ -25,83 +25,110 @@
   }
 </style>
 
-<body class="w-full h-screen bg-[#101010]">
-  <div class="w-full h-full px-14 py-12">
+<body class="w-full h-screen bg-[#101010] overflow-hidden">
+  <div
+    class="w-full h-full px-14 py-12 overflow-hidden max-[1130px]:px-8 max-[1130px]:py-8 max-[500px]:px-4 max-[500px]:py-4">
     <div class="relative w-full h-full text-white bg-[rgba(0, 0 ,0 , 0.72)] overflow-hidden">
       <div class="profile absolute w-full h-full pointer-events-none"></div>
-      <form class=" px-16 py-12" method="post" action="/profile/uploader" enctype="multipart/form-data">
-        <div class="flex gap-6">
-          <div class="h-20 w-20 rounded-full hidden">
-            <div class="bg-zinc-400/20">
-              <label class="cursor-pointer " for="image">Change</label>
+      <form class="px-16 py-12 max-[1130px]:px-8 max-[1130px]:py-8 max-[515px]:py-1 max-[515px]:px-5" method="post"
+        action="/profile/uploader" enctype="multipart/form-data">
+        <div class="flex justify-between">
+          <div class="flex gap-6">
+            <div
+              class="h-32 w-32 rounded-full bg-zinc-400/10 flex items-center justify-center max-[650px]:h-24 max-[650px]:w-24 max-[515px]:hidden">
+              <h1 class="text-4xl max-[650px]:text-3xl  max-[515px]:text-lg">
+                <%= user.username.split('')[0].toUpperCase() %>
+              </h1>
             </div>
-            <input class="hidden" type="file" name="" id="image">
-            <img src="" alt="">
+            <div class="py-5 max-[500px]:text-xs">
+              <% if(user.isUploader) { %>
+                <h4 class="text-zinc-400">Listener & uploader</h4>
+                <% } else { %>
+                  <h4 class="text-zinc-400">Listener</h4>
+                  <% } %>
+                    <h1 class="text-4xl font-semibold mt-1 max-[650px]:text-3xl max-[515px]:text-lg">Ashish Gupta</h1>
+            </div>
           </div>
-          <div class="h-32 w-32 rounded-full bg-zinc-400/10 flex items-center justify-center">
-            <h1 class="text-4xl">A</h1>
-          </div>
-          <div class="py-5">
-            <% if(user.isUploader) { %>
-              <h4 class="text-zinc-400">Listener & uploader</h4>
-              <% } else { %>
-                <h4 class="text-zinc-400">Listener</h4>
-                <% } %>
-                  <h1 class="text-4xl font-semibold mt-1">Ashish Gupta</h1>
+          <div
+            class="w-max h-max px-5 py-2 bg-zinc-400/10 max-[515px]:mt-5 max-[400px]:px-3 max-[400px]:py-1 max-[400px]:text-xs">
+            <a href="/home">Home</a>
           </div>
         </div>
-        <div class="px-2 py-16">
-          <div class="flex navlinks relative items-center gap-20 tracking-[1.6px] font-semibold text-sm font-mono">
-            <a href="" class="relative inline-block active">OVERVIEW</a>
-            <a href="" class="relative inline-block">PUBLIC PLAYLISTS</a>
-            <a href="" class="relative inline-block">FOLLOWING</a>
-            <a href="" class="relative inline-block">FOLLOWERS</a>
+        <div class="px-2 py-16 overflow-hidden">
+          <div
+            class="flex navlinks relative items-center gap-20 tracking-[1.6px] font-semibold text-sm font-mono max-[1020px]:gap-12 max-[900px]:gap-4 max-[900px]:text-xs max-[400px]:tracking-[0.9px] max-[400px]:gap-3">
+            <a href="javascript:void(0);" onclick="showSection('overview')"
+              class="relative inline-block overview active">OVERVIEW</a>
+            <a href="javascript:void(0);" onclick="showSection('pp1')"
+              class="relative inline-block pp max-[700px]:hidden">PUBLIC
+              PLAYLISTS</a>
+            <a href="javascript:void(0);" onclick="showSection('pp2')"
+              class="relative inline-block pp max-[700px]:hidden">PRIVATE
+              PLAYLISTS</a>
+            <a href="javascript:void(0);" onclick="showSection('following')" class="relative inline-block">FOLLOWING</a>
+            <a href="javascript:void(0);" onclick="showSection('followers')" class="relative inline-block">FOLLOWERS</a>
           </div>
-          <div class="w-3/4 py-16">
-            <div class="flex flex-col gap-1">
-              <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
-                <span>Username:</span><span>
-                  <%= user.username %>
-                </span>
-              </h2>
-              <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
-                <span>Email:</span><span>
-                  <%= user.email %>
-                </span>
-              </h2>
-              <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
-                <span>Playlists:</span><span>
-                  <%= user.playlists.length %>
-                </span>
-              </h2>
-              <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
-                <span>Favourites:</span><span>
-                  <%= user.favourites.length %>
-                </span>
-              </h2>
-              <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between"><span>Created
-                  At:</span><span>
-                  <%= user.createdAt.toLocaleString() %>
-                </span></h2>
-              <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between"><span>Updated
-                  At:</span><span>
-                  <%= user.updatedAt.toLocaleString() %>
-                </span></h2>
-              <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between"><span>
+          <div class="section-box">
+            <div id="overview" class="section active w-3/4 py-16 max-[650px]:w-full">
+              <div class="flex flex-col gap-1 max-[900px]:text-sm">
+                <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
+                  <span>Username:</span><span>
+                    <%= user.username %>
+                  </span>
+                </h2>
+                <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
+                  <span>Email:</span><span>
+                    <%= user.email %>
+                  </span>
+                </h2>
+                <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
+                  <span>Playlists:</span><span>
+                    <%= user.playlists.length %>
+                  </span>
+                </h2>
+                <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
+                  <span>Favourites:</span><span>
+                    <%= user.favourites.length %>
+                  </span>
+                </h2>
+                <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
+                  <span>Created At:</span>
+                  <span class="hidden min-[400px]:block">
+                    <%= user.createdAt.toLocaleString() %>
+                  </span>
+                  <span class="hidden max-[400px]:block">
+                    <%= user.createdAt.toLocaleDateString() %>
+                  </span>
+                </h2>
+                <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between">
+                  <span>Updated At:</span>
+                  <span class="hidden min-[400px]:block">
+                    <%= user.updatedAt.toLocaleString() %>
+                  </span>
+                  <span class="hidden max-[400px]:block">
+                    <%= user.updatedAt.toLocaleDateString() %>
+                  </span>
+                </h2>
+                <h2 class="bg-emerald-300/5 px-4 py-2 shadow-xl flex items-center justify-between"><span>
+                    <% if(user.isUploader) { %>
+                      <h2>You can upload some songs.</h2>
+                      <% } else { %>
+                        <h2>If you want to become an uploader ?</h2>
+                        <% } %>
+                  </span>
                   <% if(user.isUploader) { %>
-                    <h2>You can upload some songs.</h2>
+                    <a href="/music/upload" class="px-4 py-1 bg-emerald-900/50 text-white z-50">Upload Songs</a>
                     <% } else { %>
-                      <h2>If you want to become an uploader ?</h2>
+                      <input class="cursor-pointer px-4 py-1 bg-emerald-900/50 text-white z-50" type="submit"
+                        value="Click here">
                       <% } %>
-                </span>
-                <% if(user.isUploader) { %>
-                  <a href="/music/upload" class="px-4 py-1 bg-emerald-800 text-white z-50">Upload Songs</a>
-                  <% } else { %>
-                    <input class="cursor-pointer px-4 py-1 bg-emerald-800 text-white z-50" type="submit"
-                      value="Click here">
-                    <% } %>
-              </h2>
+                </h2>
+              </div>
             </div>
+            <div id="pp1" class="section active text-white/50 mt-16">Public Playlists</div>
+            <div id="pp2" class="section active text-white/50 mt-16">Private Playlists</div>
+            <div id="following" class="section active text-white/50 mt-16">Following</div>
+            <div id="followers" class="section active text-white/50 mt-16">Followers</div>
           </div>
         </div>
       </form>
@@ -109,16 +136,24 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const links = document.querySelectorAll('.navlinks a');
-
-      links.forEach(link => {
-        link.addEventListener('click', function (e) {
-          e.preventDefault();
-          links.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-        });
+    function showSection(sectionId) {
+      document.querySelectorAll(".section").forEach(section => {
+        section.classList.remove("active");
+        section.classList.add("hidden");
       });
+
+      document.getElementById(sectionId).classList.add("active");
+      document.getElementById(sectionId).classList.remove("hidden");
+
+      document.querySelectorAll('.navlinks a').forEach(link => {
+        link.classList.remove("active");
+      });
+      const activeLink = document.querySelector(`.navlinks a[href="javascript:void(0);"][onclick="showSection('${sectionId}')"]`);
+      activeLink.classList.add("active");
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      showSection('overview');
     });
   </script>
 

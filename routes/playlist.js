@@ -11,6 +11,8 @@ const {
   playlistAddTrack,
   playlistRemoveTrack,
   postUpdatePlaylist,
+  postDeletePlaylist,
+  postDeleteImagePlaylist,
 } = require("../controllers/playlist-controller");
 
 router.get("/check", isLoggedIn, (req, res) => {
@@ -23,6 +25,8 @@ router.post("/create", isLoggedIn, postCreatePlaylist);
 
 router.post("/update/:playlistId", isLoggedIn, postUpdatePlaylist);
 
+router.post("/delete/image", isLoggedIn, postDeleteImagePlaylist);
+
 router.get("/show", isLoggedIn, showPlaylist);
 
 router.get("/songs/:playlistId", isLoggedIn, showAllPlaylistSongs);
@@ -30,5 +34,7 @@ router.get("/songs/:playlistId", isLoggedIn, showAllPlaylistSongs);
 router.post("/:playlistId/:songId", isLoggedIn, playlistAddTrack);
 
 router.post("/remove/:playlistId/:songId", isLoggedIn, playlistRemoveTrack);
+
+router.post("/delete", isLoggedIn, postDeletePlaylist);
 
 module.exports = router;

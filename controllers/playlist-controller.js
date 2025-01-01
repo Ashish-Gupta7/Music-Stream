@@ -4,7 +4,6 @@ const { userModel } = require("../models/user-model");
 const dbgr = require("debug")("development:playlistController");
 const upload = require("../config/multer-config");
 const fs = require("fs");
-const path = require("path");
 
 const getCreatePlaylist = (req, res) => {
   res.status(200).render("playlist");
@@ -38,7 +37,7 @@ const postCreatePlaylist = (req, res) => {
         { new: true }
       );
 
-      return res.status(201).redirect("/");
+      return res.status(201).redirect("/playlist/show");
     } catch (err) {
       dbgr(`Error during playlist creation: ${err.message}`);
       return res.status(500).render("error", {
@@ -66,12 +65,26 @@ const postUpdatePlaylist = (req, res) => {
         return res.status(404).json({ message: "Playlist not found" });
       }
 
+      let oldPoster = playlist.poster;
+
       if (image) {
         playlist.poster = image;
       }
 
       if (name) {
         playlist.name = name;
+      }
+
+      if (oldPoster === null) {
+        dbgr("postUpdatePlaylist: We can't delete default-image.png file.");
+      } else {
+        fs.unlink(`./public/images/picture/${oldPoster}`, (err) => {
+          if (err) {
+            dbgr("Error deleting file (postUpdatePlaylist):", err);
+          } else {
+            dbgr("postUpdatePlaylist: File deleted successfully!");
+          }
+        });
       }
 
       await playlist.save();
@@ -85,6 +98,46 @@ const postUpdatePlaylist = (req, res) => {
       });
     }
   });
+};
+
+const postDeleteImagePlaylist = async (req, res) => {
+  try {
+    let { playlistId } = req.body;
+
+    let playlist = await playlistModel.findById(playlistId);
+
+    if (!playlist) {
+      return res.status(404).json({ message: "Playlist not found" });
+    }
+
+    let oldPoster = playlist.poster;
+
+    if (oldPoster === null) {
+      dbgr("postDeleteImagePlaylist: We can't delete default-image.png file.");
+    } else {
+      fs.unlink(`./public/images/picture/${oldPoster}`, (err) => {
+        if (err) {
+          dbgr("Error deleting file (postDeleteImagePlaylist):", err);
+        } else {
+          dbgr("postDeleteImagePlaylist: File deleted successfully!");
+        }
+      });
+    }
+
+    playlist.poster = null;
+
+    await playlist.save();
+
+    return res
+      .status(200)
+      .json({ message: "Playlist poster deleted successfully" });
+  } catch (err) {
+    dbgr(`Error during playlist poster delete: ${err.message}`);
+    return res.status(500).render("error", {
+      err: "Failed to delete playlist poster. Please try again later.",
+      status: 500,
+    });
+  }
 };
 
 const showPlaylist = async (req, res) => {
@@ -103,7 +156,7 @@ const showPlaylist = async (req, res) => {
           let playlist = await playlistModel.findById(findId);
           return playlist;
         } catch (err) {
-          console.error(err);
+          dbgr("Error during showPlaylist: ", err);
           return null;
         }
       })
@@ -212,6 +265,42 @@ const playlistRemoveTrack = async (req, res) => {
   }
 };
 
+const postDeletePlaylist = async (req, res) => {
+  try {
+    let { playlistId } = req.body;
+
+    const playlist = await playlistModel.findById(playlistId);
+
+    if (!playlist) {
+      return res.status(404).json({ message: "Playlist not found" });
+    }
+
+    const deletedPlaylist = await playlistModel.findByIdAndDelete(playlistId);
+
+    let oldPoster = deletedPlaylist.poster;
+
+    if (oldPoster === null) {
+      dbgr("postDeletePlaylist: We can't delete default-image.png file.");
+    } else {
+      fs.unlink(`./public/images/picture/${oldPoster}`, (err) => {
+        if (err) {
+          dbgr("Error deleting file (postDeletePlaylist):", err);
+        } else {
+          dbgr("postDeletePlaylist: File deleted successfully!");
+        }
+      });
+    }
+
+    res.status(200).json({ message: "Playlist Deleted Successfully" });
+  } catch (err) {
+    dbgr(`Error during playlist delete: ${err.message}`);
+    return res.status(500).render("error", {
+      err: "Failed to delete playlist. Please try again later.",
+      status: 500,
+    });
+  }
+};
+
 module.exports = {
   getCreatePlaylist,
   postCreatePlaylist,
@@ -220,4 +309,6 @@ module.exports = {
   showAllPlaylistSongs,
   playlistAddTrack,
   playlistRemoveTrack,
+  postDeletePlaylist,
+  postDeleteImagePlaylist,
 };

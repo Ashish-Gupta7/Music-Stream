@@ -8,7 +8,7 @@ const playlistSchema = new mongoose.Schema(
     },
     poster: {
       type: String,
-      default: "defaultPoster.jpg",
+      default: "default-image.webp",
     },
     tracks: [
       {
